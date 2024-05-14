@@ -1,4 +1,4 @@
-package org.example.virussimfx;
+package GUI;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

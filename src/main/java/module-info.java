@@ -1,8 +1,8 @@
-module org.example.virussimfx {
+module GUI {
     requires javafx.controls;
     requires javafx.fxml;
 
 
-    opens org.example.virussimfx to javafx.fxml;
-    exports org.example.virussimfx;
+    opens GUI to javafx.fxml;
+    exports GUI;
 }

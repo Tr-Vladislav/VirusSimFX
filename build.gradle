@@ -25,8 +25,8 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-  mainModule = 'org.example.virussimfx'
-  mainClass = 'org.example.virussimfx.HelloApplication'
+  mainModule = 'GUI'
+  mainClass = 'GUI.HelloApplication'
 }
 
 javafx {

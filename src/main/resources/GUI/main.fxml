@@ -1,23 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="myPane" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MainController">
+<AnchorPane prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MainController">
     <children>
-      <ImageView fitHeight="501.0" fitWidth="751.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../assets/VirusBackGroud.jpg" />
-         </image>
-      </ImageView>
-      <Rectangle fx:id="field" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="195.0" layoutX="283.0" layoutY="133.0" stroke="BLACK" strokeType="INSIDE" width="205.0" />
-      <Circle fill="#ff1f1f" layoutX="312.0" layoutY="170.0" radius="5.0" stroke="#0000007e" strokeType="INSIDE" />
-      <Button fx:id="Button" layoutX="360.0" layoutY="376.0" mnemonicParsing="false" onAction="#oneMoreCircle" text="Button" />
-      <Label fx:id="label" layoutX="346.0" layoutY="29.0" text="Label" />
+      <ButtonBar layoutX="514.0" layoutY="436.0" prefHeight="40.0" prefWidth="200.0" />
+      <Pane fx:id="myPane" layoutX="-1.0" prefHeight="410.0" prefWidth="750.0">
+         <children>
+            <Button layoutX="343.0" layoutY="193.0" mnemonicParsing="false" onAction="#ShowMap" text="Generate" />
+         </children>
+      </Pane>
+      <Pane layoutX="-1.0" layoutY="405.0" prefHeight="95.0" prefWidth="750.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a49c97" height="95.0" layoutX="1.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="750.0" />
+            <Label layoutX="28.0" layoutY="5.0" text="Healthy:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="29.0" layoutY="31.0" text="Sick:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="29.0" layoutY="56.0" text="Dead:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="342.0" layoutY="6.0" text="World">
+               <font>
+                  <Font name="Georgia Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="464.0" layoutY="29.0" text="Infected countries:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="466.0" layoutY="6.0" text="Healthy countries:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <CheckBox fx:id="redact" layoutX="339.0" layoutY="40.0" mnemonicParsing="false" onAction="#setEvents" text="Redact">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </CheckBox>
+            <Button fx:id="next" layoutX="673.0" layoutY="48.0" mnemonicParsing="false" onAction="#nextStep" text="Next">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Label fx:id="healthy" layoutX="98.0" layoutY="6.0" text="0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="sick" layoutX="70.0" layoutY="32.0" text="0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="dead" layoutX="81.0" layoutY="56.0" text="0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="healthyCountries" layoutX="603.0" layoutY="7.0" text="0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="InfectedCountries" layoutX="603.0" layoutY="29.0" text="0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
     </children>
 </AnchorPane>

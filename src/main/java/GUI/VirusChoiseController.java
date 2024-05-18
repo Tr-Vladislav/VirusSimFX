@@ -23,7 +23,6 @@ public class VirusChoiseController {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Virus_setup.fxml"));
         root = loader.load();
-
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);

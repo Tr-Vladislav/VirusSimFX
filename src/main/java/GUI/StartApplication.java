@@ -13,7 +13,7 @@ public class StartApplication extends Application {
     public void start(Stage stage) throws IOException {
         try {
 
-            Parent root = FXMLLoader.load(getClass().getResource("start_window.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
             Scene scene = new Scene(root);
 
             stage.setScene(scene);

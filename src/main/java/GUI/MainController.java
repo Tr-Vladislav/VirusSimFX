@@ -3,6 +3,7 @@ package GUI;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -25,10 +26,19 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.shape.Polygon;
-import java.util.Random;
+
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javafx.application.Platform;
 
 public class MainController {
+
+    private int paneWidth=750;
+    private int paneHeight=410;
     private static MainController instance;
+    private ScheduledExecutorService scheduler;
 
     public MainController(){
         instance = this;
@@ -41,6 +51,12 @@ public class MainController {
 
     private Polygon[] Map;
     private int circle_cnt = 0;
+    @FXML
+    private Label world;
+    @FXML
+    private Button next;
+    @FXML
+    private Button startButton;
     @FXML
     private CheckBox redact;
     @FXML
@@ -59,24 +75,8 @@ public class MainController {
     @FXML
     private Label healthyCountries;
     @FXML
-    private Label InfectedCountries;
+    private Label infectedCountries;
 
-
-    @FXML
-    public void oneMoreCircle(ActionEvent event) throws IOException {
-        for (int i = 0; i < 50; i++) {
-            if(circle_cnt>500)break;
-            int x = (int) (field.getLayoutX() + 5 + Math.random() * (field.getWidth() - 10));
-            int y = (int) (field.getLayoutY() + 5 + Math.random() * (field.getHeight() - 10));
-            Circle circle = new Circle(x, y, 1, Color.RED);
-            circle.setMouseTransparent(true);
-            label.setText(String.valueOf(field.getLayoutX()) + "\n" + String.valueOf(field.getLayoutY()));
-            scene = myPane.getScene();
-            myPane.getChildren().add(circle);
-            circle_cnt++;
-
-        }
-    }
     public static MainController getInstance() {
         return instance;
     }
@@ -89,25 +89,73 @@ public class MainController {
             map.setMouseEvent("Pick", true);
         }
     }
-    public void setStatistics(int health, int sick, int dead){
-        this.healthy.setText(String.valueOf(health));
-        this.sick.setText(String.valueOf(sick));
-        this.dead.setText(String.valueOf(dead));
+    public void setStatistics(){
+        if(map.pickedCountry.population.getCountryName().equals("World")){
+            this.healthy.setText(String.valueOf(map.pickedCountry.population.getWorldPopulation()-map.pickedCountry.population.getWorldInfected()));
+            this.sick.setText(String.valueOf(map.pickedCountry.population.getWorldInfected()));
+            this.dead.setText(String.valueOf(map.pickedCountry.population.getWorldCorpse()));
+        }else {
+            this.healthy.setText(String.valueOf(map.pickedCountry.population.getPopulation() - map.pickedCountry.population.getInfected()));
+            this.sick.setText(String.valueOf(map.pickedCountry.population.getInfected()));
+            this.dead.setText(String.valueOf(map.pickedCountry.population.getCorpse()));
+        }
+        this.healthyCountries.setText(String.valueOf(map.pickedCountry.getHealthyCountries()));
+        this.infectedCountries.setText(String.valueOf(map.pickedCountry.getInfectedCountries()));
     }
     public void nextStep(){
-        map.pickedCountry.population.setInfected(map.pickedCountry.population.getInfected()+20);
-        showInfected();
-        setStatistics(map.pickedCountry.population.getPopulation()-map.pickedCountry.population.getInfected(),map.pickedCountry.population.getInfected(),map.pickedCountry.population.getCorpse());
+        for(Country country: map.getCountries()){
+            if(country.population.getInfected()+country.population.getInfected()*country.population.getInfections()<=country.population.getPopulation()) country.population.setInfected(country.population.getInfected()+(int)Math.ceil(country.population.getInfected()*country.population.getInfections()));
+            else country.population.setInfected(country.population.getPopulation());
+            if((double)(country.population.getInfected())/country.population.getPopulation() > 0.3) {
+                map.newInfected(country);
+            }
+            showInfected(country);
+        }
+        if(map.pickedCountry.population.getWorldPopulation()==map.pickedCountry.population.getWorldInfected()){
+            stopTimer();
+        }
 
+        setStatistics();
     }
     //Creating the mouse event handle
     public void ShowMap(){
 
 
-        map = new Map((int)myPane.getWidth(), (int)myPane.getHeight(),25);
+        map = new Map(paneWidth, paneHeight,25);
         map.setMouseEvent("Pick",true);
-        for(Polygon country:map.getCountries()){
-            myPane.getChildren().add(country);
+        for(Country country:map.getCountries()){
+            myPane.getChildren().add(country.getArea());
+        }
+        setStatistics();
+    }
+    public void setFirstInfectedCountry(){
+        if(!map.pickedCountry.population.getCountryName().equals("World")){
+            System.out.println("Start");
+            map.pickedCountry.setIsInfected();
+            map.pickedCountry.population.setInfected(1);
+            setStatistics();
+            startButton.setVisible(false);
+            next.setVisible(true);
+            startTimer();
+
+        }
+        else{
+            System.out.println("Choose country");
+        }
+    }
+    private void startTimer() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+        }
+        scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
+            nextStep();
+        }), 0, 100, TimeUnit.MILLISECONDS);
+    }
+
+    private void stopTimer() {
+        if (scheduler != null) {
+            scheduler.shutdown();
         }
     }
     private double[] generateRandomPointInPolygon(Polygon polygon) {
@@ -125,9 +173,9 @@ public class MainController {
         }
     }
 
-    public void showInfected(){
-        for (int i = 0; i < map.pickedCountry.population.getStepSick(); i++) {
-            double[] xy = generateRandomPointInPolygon(map.pickedCountry.getArea());
+    public void showInfected(Country country){
+        for (int i = 0; i < country.population.getStepSick(); i++) {
+            double[] xy = generateRandomPointInPolygon(country.getArea());
             Circle circle = new Circle(xy[0], xy[1], 1, Color.RED);
             circle.setMouseTransparent(true);
             scene = myPane.getScene();
@@ -138,7 +186,18 @@ public class MainController {
     @FXML
     void initialize(){
 
+        ShowMap();
 
+        EventHandler<MouseEvent> worldPick = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                map.pickedCountry.getArea().setStroke(Color.BLACK);
+                map.pickedCountry.getArea().setStrokeWidth(1.5);
+                map.pickedCountry = map.getWorld();
+                setStatistics();
+            }
+        };
+        world.addEventFilter(MouseEvent.MOUSE_CLICKED, worldPick);
     }
 
 }

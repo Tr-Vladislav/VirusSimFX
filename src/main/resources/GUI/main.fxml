@@ -12,11 +12,7 @@
 <AnchorPane prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MainController">
     <children>
       <ButtonBar layoutX="514.0" layoutY="436.0" prefHeight="40.0" prefWidth="200.0" />
-      <Pane fx:id="myPane" layoutX="-1.0" prefHeight="410.0" prefWidth="750.0">
-         <children>
-            <Button layoutX="343.0" layoutY="193.0" mnemonicParsing="false" onAction="#ShowMap" text="Generate" />
-         </children>
-      </Pane>
+      <Pane fx:id="myPane" layoutX="-1.0" prefHeight="410.0" prefWidth="750.0" />
       <Pane layoutX="-1.0" layoutY="405.0" prefHeight="95.0" prefWidth="750.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a49c97" height="95.0" layoutX="1.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="750.0" />
@@ -35,7 +31,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="342.0" layoutY="6.0" text="World">
+            <Label fx:id="world" layoutX="342.0" layoutY="6.0" text="World">
                <font>
                   <Font name="Georgia Bold" size="20.0" />
                </font>
@@ -50,12 +46,12 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <CheckBox fx:id="redact" layoutX="339.0" layoutY="40.0" mnemonicParsing="false" onAction="#setEvents" text="Redact">
+            <CheckBox fx:id="redact" layoutX="256.0" layoutY="19.0" mnemonicParsing="false" onAction="#setEvents" text="Redact">
                <font>
                   <Font size="14.0" />
                </font>
             </CheckBox>
-            <Button fx:id="next" layoutX="673.0" layoutY="48.0" mnemonicParsing="false" onAction="#nextStep" text="Next">
+            <Button fx:id="next" layoutX="673.0" layoutY="48.0" mnemonicParsing="false" onAction="#nextStep" text="Next" visible="false">
                <font>
                   <Font size="16.0" />
                </font>
@@ -80,11 +76,16 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="InfectedCountries" layoutX="603.0" layoutY="29.0" text="0">
+            <Label fx:id="infectedCountries" layoutX="603.0" layoutY="29.0" text="0">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
+            <Button fx:id="startButton" layoutX="350.0" layoutY="43.0" mnemonicParsing="false" onAction="#setFirstInfectedCountry" text="Start">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
     </children>

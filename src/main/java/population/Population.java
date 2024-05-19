@@ -10,6 +10,11 @@ import java.util.Random;
 
 // Класс для представления популяции
 public class Population {
+
+    private static int worldPopulation=0;
+    private static int worldInfected=0;
+    private static int worldCorpse = 0;
+    private double infections;
     private String country;
     private double populationDensity;
     private int population;
@@ -25,6 +30,7 @@ public class Population {
 
     // Конструктор
     public Population(String country, double populationDensity, int population, double stability, double averageTemperature, boolean borders, double medicalLevel) {
+        worldPopulation+=population;
         this.country = country;
         this.populationDensity = populationDensity;
         this.population = population;
@@ -34,8 +40,15 @@ public class Population {
         this.medicalLevel = medicalLevel;
         this.infected = 0;
         this.stepSick = 0;
+        this.infections = 0.1;
+    }
+    public Population(String country){
+        this.country = country;
     }
 
+    public double getInfections(){
+        return infections;
+    }
     // Метод для расчета одного шага симуляции заражения
     public void simulateInfectionStep(Virus virus) {
         Random random = new Random();
@@ -55,6 +68,7 @@ public class Population {
 
     public void setInfected(int infected) {
         this.stepSick=infected-this.infected;
+        worldInfected+=infected-this.infected;
         this.infected = infected;
     }
     public int getStepSick(){
@@ -75,6 +89,25 @@ public class Population {
 
     public void setBorders(boolean borders) {
         this.borders = borders;
+    }
+    public int getWorldPopulation(){
+        return worldPopulation;
+    }
+    public int getWorldInfected(){
+        return worldInfected;
+    }
+    public int getWorldCorpse(){
+        return worldCorpse;
+    }
+    public String getCountryName(){
+        return  country;
+    }
+    public void redactWorldPopulation(boolean isCountry){
+        if(isCountry){
+            worldPopulation+=population;
+        }else{
+            worldPopulation-=population;
+        }
     }
 
 }

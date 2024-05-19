@@ -8,8 +8,12 @@ import javafx.scene.shape.Polygon;
 import population.*;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Map {
+
+    private Country world;
     private static MainController mainController;
     private ArrayList<ArrayList<Country>> countries;
     private int quantityCountries;
@@ -29,7 +33,6 @@ public class Map {
         this.Height = Height;
         this.Radius = Radius;
         mapCreate( Radius, Width, Height);
-        pickedCountry = new Country(new Polygon(),"",0,0,0,0,false,0);
     }
     public void mapCreate( double hexRadius,double mapWidth,double mapHeight){
 
@@ -50,18 +53,54 @@ public class Map {
 
                 Polygon hexagon = createHexagon(x, y, hexRadius);
                 hexagon.setFill(getColor(row));
-                Country country = new Country(hexagon,String.valueOf(quantityCountries),Math.random(),(int)(Math.random()*800),Math.random(),10+(int)(Math.random()*25),false,Math.random());
+                Country country = new Country(hexagon,"Country "+ String.valueOf(quantityCountries),Math.random(),100+(int)(Math.random()*800),Math.random(),10+(int)(Math.random()*25),false,Math.random());
                 country.setColor(getColor(row));
                 if(row==0 || row>=(this.numRows-2) || col==0 || col>= this.numCols-1){
                     country.setIsCountry(false);
                     country.getArea().setFill(Color.GRAY);
                 }
                 quantityCountries+=1;
+                country.row = row;
+                country.col = col;
                 mapRow.add(country);
             }
             countries.add(mapRow);
-
         }
+        world = new Country("World");
+        pickedCountry = world;
+    }
+    public void newInfected(Country infectedCountry){
+        Country country = countries.get(infectedCountry.row).get(infectedCountry.col-1);
+        if(country.getIsCountry() && !country.getIsInfected()){
+            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            if(country.population.getInfected()>0)country.setIsInfected();
+        }
+        country = countries.get(infectedCountry.row).get(infectedCountry.col+1);
+        if(country.getIsCountry() && !country.getIsInfected()){
+            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            if(country.population.getInfected()>0)country.setIsInfected();
+        }
+        country = countries.get(infectedCountry.row+1).get(infectedCountry.col);
+        if(country.getIsCountry() && !country.getIsInfected()){
+            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            if(country.population.getInfected()>0)country.setIsInfected();
+        }
+        country = countries.get(infectedCountry.row-1).get(infectedCountry.col);
+        if(country.getIsCountry() && !country.getIsInfected()){
+            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            if(country.population.getInfected()>0)country.setIsInfected();
+        }
+        country = countries.get(infectedCountry.row+1).get(infectedCountry.col-1);
+        if(country.getIsCountry() && !country.getIsInfected()){
+            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            if(country.population.getInfected()>0)country.setIsInfected();
+        }
+        country = countries.get(infectedCountry.row+1).get(infectedCountry.col+1);
+        if(country.getIsCountry() && !country.getIsInfected()){
+            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            if(country.population.getInfected()>0)country.setIsInfected();
+        }
+
     }
     public void setMouseEvent(String type, boolean isEvent) {
         for (ArrayList<Country> countryCol : countries) {
@@ -79,6 +118,7 @@ public class Map {
                                         country.getArea().setFill(country.getColor());
                                         country.setIsCountry(true);
                                     }
+                                    mainController.setStatistics();
                                 }
                             };
                             country.setEventSetGray(eventSetGray);
@@ -89,17 +129,7 @@ public class Map {
                             EventHandler<MouseEvent> eventPick = new EventHandler<MouseEvent>() {
                                 @Override
                                 public void handle(MouseEvent e) {
-                                    if (country.getIsCountry()) {
-                                        if (pickedCountry != null) {
-                                            pickedCountry.getArea().setStroke(Color.BLACK);
-                                            pickedCountry.getArea().setStrokeWidth(1.5);
-                                        }
-                                        country.getArea().setStroke(Color.RED);
-                                        country.getArea().setStrokeWidth(4);
-                                        mainController.setStatistics(country.population.getPopulation()-country.population.getInfected(),country.population.getInfected(),country.population.getCorpse());
-
-                                        pickedCountry = country;
-                                    }
+                                    setPickedCountry(country);
                                 }
                             };
                             country.setEventPick(eventPick);
@@ -122,6 +152,19 @@ public class Map {
                     }
                 }
             }
+        }
+    }
+    public void setPickedCountry(Country country){
+        if (country.getIsCountry()) {
+            if (pickedCountry != null) {
+                pickedCountry.getArea().setStroke(Color.BLACK);
+                pickedCountry.getArea().setStrokeWidth(1.5);
+            }
+            country.getArea().setStroke(Color.RED);
+            country.getArea().setStrokeWidth(4);
+            pickedCountry = country;
+            mainController.setStatistics();
+
         }
     }
     private Paint getColor(int row){
@@ -154,19 +197,27 @@ public class Map {
         hexagon.setStrokeWidth(1.5);
         return hexagon;
     }
-    public ArrayList<Polygon> getCountries(){
-        ArrayList<Polygon> map = new ArrayList<>();
+    public ArrayList<Country> getCountries(){
+        ArrayList<Country> map = new ArrayList<>();
         for (int row = 0; row < this.numRows; row++) {
             for (int col = 0; col < this.numCols; col++) {
-                map.add(countries.get(row).get(col).getArea());
+                map.add(countries.get(row).get(col));
             }
         }
         return map;
+    }
+    public Country getWorld(){
+        return world;
     }
 
 
 }
 class Country{
+    private static int healthyCountries=0;
+    private static int infectedCountries=0;
+    private boolean isInfected;
+    public int row;
+    public int col;
     public Population population;
 
     private EventHandler<MouseEvent> eventSetGray;
@@ -175,15 +226,33 @@ class Country{
     private Polygon area;
     private boolean isCountry;
     public Country(Polygon hexagon,String countryName,double populationDensity, int quantity, double stability, double averageTemperature, boolean borders, double medicalLevel){
+        healthyCountries+=1;
+        this.isInfected = false;
         this.area = hexagon;
         this.isCountry=true;
         population = new Population(countryName,populationDensity,quantity, stability,averageTemperature, borders, medicalLevel);
     }
+    public Country(String countryName){
+        this.isInfected = false;
+        this.area = new Polygon();
+        this.isCountry = false;
+        this.population = new Population(countryName);
+    }
     public Polygon getArea(){
         return area;
     }
+
     public void setIsCountry(boolean isCountry){
+
         this.isCountry = isCountry;
+        if(isCountry){
+            healthyCountries+=1;
+            population.redactWorldPopulation(true);
+
+        }else {
+            healthyCountries -= 1;
+            population.redactWorldPopulation(false);
+        }
     }
     public boolean getIsCountry(){
         return isCountry;
@@ -208,5 +277,20 @@ class Country{
 
     public EventHandler<MouseEvent> getEventPick() {
         return eventPick;
+    }
+    public void setIsInfected(){
+        this.isInfected=true;
+        infectedCountries+=1;
+        healthyCountries-=1;
+
+    }
+    public boolean getIsInfected(){
+        return this.isInfected;
+    }
+    public int getHealthyCountries(){
+        return healthyCountries;
+    }
+    public int getInfectedCountries(){
+        return infectedCountries;
     }
 }

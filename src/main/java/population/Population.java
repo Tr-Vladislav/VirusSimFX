@@ -20,11 +20,14 @@ public class Population {
     private int population;
     private int infected;
     private int stepSick;
+    private int stepCorpse;
     private int corpse; //died
     private double stability;
     private double averageTemperature;
     private boolean borders;
     private double medicalLevel;
+    private static final int COUNTRY_AREA = 10;
+    Random random = new Random();
 
 
 
@@ -32,35 +35,40 @@ public class Population {
     public Population(String country, double populationDensity, int population, double stability, double averageTemperature, boolean borders, double medicalLevel) {
         worldPopulation+=population;
         this.country = country;
-        this.populationDensity = populationDensity;
-        this.population = population;
-        this.stability = stability;
+        this.population = random.nextInt() & Integer.MAX_VALUE;
+        this.populationDensity = (double) population/COUNTRY_AREA < 1000 ? 0.1 : (population/COUNTRY_AREA < 10000 ? 0.15 : 0.30);
+        this.stability = random.nextDouble();
         this.averageTemperature = averageTemperature;
-        this.borders = borders;
-        this.medicalLevel = medicalLevel;
+        this.medicalLevel = stability > 0.80 ? 1 : (stability > 50 ? 0.8 : stability > 20 ? 0.5 : 0.1);
         this.infected = 0;
+        this.corpse = 0;
         this.stepSick = 0;
-        this.infections = 0.1;
+        this.borders = false;
     }
-    public Population(String country){
+
+    public Population(String country) {
         this.country = country;
+    }
+
+    // Метод для расчета одного шага симуляции заражения
+    public void simulateInfectionStep(Virus virus) {
+        population = population - stepCorpse;
+        populationDensity = (double) population/COUNTRY_AREA < 1000 ? 0.1 : (population/COUNTRY_AREA < 10000 ? 0.15 : 0.30);
+        medicalLevel = medicalLevel - corpse / population > 0.8 ? medicalLevel : (corpse / population > 50 ? medicalLevel * 0.7 : (corpse / population > 25 ? medicalLevel * 0.4 : corpse / population > 10 ? medicalLevel * 0.15 : 0));
+        double calculateTransmissionProbability = virus.getInfectionProbability() + populationDensity - medicalLevel - stability - (borders ? 0.05 : 0);
+
+
+        // Рассчитываем вероятность передачи вируса текущему человеку
+        double transmissionProbability = calculateTransmissionProbability > 1 ? 1 : (calculateTransmissionProbability < 0 ? 0 : calculateTransmissionProbability);
+
+
+
+
     }
 
     public double getInfections(){
         return infections;
     }
-    // Метод для расчета одного шага симуляции заражения
-    public void simulateInfectionStep(Virus virus) {
-        Random random = new Random();
-
-        // Рассчитываем вероятность передачи вируса текущему человеку
-        //double transmissionProbability = virus.infectionProbability - medicalLevel - stability ;
-
-        // Генерируем случайное число от 0 до 1
-        double randomNumber = random.nextDouble();
-
-    }
-
 
     public void medicalDevelopment() {
 
@@ -68,7 +76,6 @@ public class Population {
 
     public void setInfected(int infected) {
         this.stepSick=infected-this.infected;
-        worldInfected+=infected-this.infected;
         this.infected = infected;
     }
     public int getStepSick(){

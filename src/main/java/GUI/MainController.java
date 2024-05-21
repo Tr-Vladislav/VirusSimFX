@@ -121,7 +121,7 @@ public class MainController {
     public void ShowMap(){
 
 
-        map = new Map(paneWidth, paneHeight,25);
+        map = new Map(paneWidth, paneHeight,20);
         map.setMouseEvent("Pick",true);
         for(Country country:map.getCountries()){
             myPane.getChildren().add(country.getArea());
@@ -143,7 +143,7 @@ public class MainController {
             System.out.println("Choose country");
         }
     }
-    private void startTimer() {
+    public void startTimer() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
         }
@@ -153,7 +153,7 @@ public class MainController {
         }), 0, 100, TimeUnit.MILLISECONDS);
     }
 
-    private void stopTimer() {
+    public void stopTimer() {
         if (scheduler != null) {
             scheduler.shutdown();
         }

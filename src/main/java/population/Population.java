@@ -1,9 +1,5 @@
 package population;
 
-
-
-
-
 import virus.Virus;
 
 import java.util.Random;
@@ -11,9 +7,9 @@ import java.util.Random;
 // Класс для представления популяции
 public class Population {
 
-    private static int worldPopulation=0;
-    private static int worldInfected=0;
-    private static int worldCorpse = 0;
+    private static long worldPopulation = 0;
+    private static long worldInfected = 0;
+    private static long worldCorpse = 0;
     private double infections;
     private String country;
     private double populationDensity;
@@ -32,10 +28,11 @@ public class Population {
 
 
     // Конструктор
-    public Population(String country, double populationDensity, int population, double stability, double averageTemperature, boolean borders, double medicalLevel) {
+    public Population(String country, int population, double averageTemperature) {
         worldPopulation+=population;
         this.country = country;
-        this.population = random.nextInt() & Integer.MAX_VALUE;
+        //this.population = random.nextInt() & Integer.MAX_VALUE;
+        this.population = population;
         this.populationDensity = (double) population/COUNTRY_AREA < 1000 ? 0.1 : (population/COUNTRY_AREA < 10000 ? 0.15 : 0.30);
         this.stability = random.nextDouble();
         this.averageTemperature = averageTemperature;
@@ -44,6 +41,7 @@ public class Population {
         this.corpse = 0;
         this.stepSick = 0;
         this.borders = false;
+        this.infections = 0.1;
     }
 
     public Population(String country) {
@@ -76,6 +74,7 @@ public class Population {
 
     public void setInfected(int infected) {
         this.stepSick=infected-this.infected;
+        worldInfected+=infected-this.infected;
         this.infected = infected;
     }
     public int getStepSick(){
@@ -97,13 +96,13 @@ public class Population {
     public void setBorders(boolean borders) {
         this.borders = borders;
     }
-    public int getWorldPopulation(){
+    public long getWorldPopulation(){
         return worldPopulation;
     }
-    public int getWorldInfected(){
+    public long getWorldInfected(){
         return worldInfected;
     }
-    public int getWorldCorpse(){
+    public long getWorldCorpse(){
         return worldCorpse;
     }
     public String getCountryName(){

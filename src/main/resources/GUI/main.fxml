@@ -86,6 +86,8 @@
                   <Font size="16.0" />
                </font>
             </Button>
+            <Button fx:id="stop" layoutX="256.0" layoutY="54.0" mnemonicParsing="false" onAction="#stopTimer" text="Stop" />
+            <Button fx:id="start" layoutX="199.0" layoutY="56.0" mnemonicParsing="false" onAction="#startTimer" text="Start" />
          </children>
       </Pane>
     </children>

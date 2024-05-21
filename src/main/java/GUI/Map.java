@@ -8,8 +8,7 @@ import javafx.scene.shape.Polygon;
 import population.*;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class Map {
 
@@ -72,35 +71,39 @@ public class Map {
     public void newInfected(Country infectedCountry){
         Country country = countries.get(infectedCountry.row).get(infectedCountry.col-1);
         if(country.getIsCountry() && !country.getIsInfected()){
-            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected();
         }
         country = countries.get(infectedCountry.row).get(infectedCountry.col+1);
         if(country.getIsCountry() && !country.getIsInfected()){
-            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected();
         }
         country = countries.get(infectedCountry.row+1).get(infectedCountry.col);
         if(country.getIsCountry() && !country.getIsInfected()){
-            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected();
         }
         country = countries.get(infectedCountry.row-1).get(infectedCountry.col);
         if(country.getIsCountry() && !country.getIsInfected()){
-            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected();
         }
-        country = countries.get(infectedCountry.row+1).get(infectedCountry.col-1);
+        country = countries.get(infectedCountry.row+nearlyHex(infectedCountry.col)).get(infectedCountry.col-1);
         if(country.getIsCountry() && !country.getIsInfected()){
-            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected();
         }
-        country = countries.get(infectedCountry.row+1).get(infectedCountry.col+1);
+        country = countries.get(infectedCountry.row+nearlyHex(infectedCountry.col)).get(infectedCountry.col+1);
         if(country.getIsCountry() && !country.getIsInfected()){
-            country.population.setInfected((int)Math.ceil(Math.random()*30));
+            country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected();
         }
 
+    }
+    private int nearlyHex(int col){
+        if(col%2==1)return 1;
+        else return -1;
     }
     public void setMouseEvent(String type, boolean isEvent) {
         for (ArrayList<Country> countryCol : countries) {
@@ -230,7 +233,7 @@ class Country{
         this.isInfected = false;
         this.area = hexagon;
         this.isCountry=true;
-        population = new Population(countryName,populationDensity,quantity, stability,averageTemperature, borders, medicalLevel);
+        population = new Population(countryName, quantity, averageTemperature);
     }
     public Country(String countryName){
         this.isInfected = false;

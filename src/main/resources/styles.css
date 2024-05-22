@@ -1,0 +1,39 @@
+.progress-bar .track {
+    -fx-background-color: #ffffff; /* Цвет фона полосы прогресса */
+}
+
+.green-bar .bar {
+    -fx-background-color: #4caf50; /* Зеленый цвет заполненной части */
+}
+
+.red-bar .bar {
+    -fx-background-color: #f44336; /* Красный цвет заполненной части */
+}
+
+.black-bar .bar {
+    -fx-background-color: #000000; /* Черный цвет заполненной части */
+}
+.toggle-button {
+    -fx-background-color: #dddddd; /* Светло-серый цвет фона */
+    -fx-text-fill: #333333; /* Темно-серый цвет текста */
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 0; /* Убираем закругление */
+    -fx-border-color: #aaaaaa;
+    -fx-border-width: 2;
+    -fx-border-radius: 0; /* Убираем закругление */
+}
+
+.toggle-button:selected {
+    -fx-background-color: #555555; /* Темно-серый цвет для выбранного состояния */
+    -fx-text-fill: white; /* Белый цвет текста для выбранного состояния */
+    -fx-border-color: #444444; /* Темно-серая граница */
+}
+
+.toggle-button:hover {
+    -fx-background-color: #e0e0e0; /* Светло-серый цвет при наведении */
+}
+
+.toggle-button:selected:hover {
+    -fx-background-color: #666666; /* Темно-серый цвет при наведении на выбранную кнопку */
+}

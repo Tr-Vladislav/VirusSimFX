@@ -41,6 +41,31 @@ public class Map {
         this.numCols = (int) ((int) mapWidth/hexWidth)+1;
         this.numRows = (int) ((int) mapHeight/hexHeight)+2;
 
+        String[] settlements = {
+                "Springfield", "Riverton", "Mapleton", "Greenville", "Fairview",
+                "Lakeside", "Hillcrest", "Brookfield", "Woodland", "Pinehurst",
+                "Rosedale", "Cedarville", "Milltown", "Elk Grove", "Ashford",
+                "Sunnyvale", "Bridgewater", "Clearwater", "Kingswood", "Silverton",
+                "Oakridge", "Westfield", "Eastwood", "Northgate", "Southport",
+                "Havenwood", "Bloomfield", "Riverdale", "Highland", "Meadowbrook",
+                "Kingsport", "Foxborough", "Greenfield", "Newcastle", "Lakewood",
+                "Parkside", "Stonehaven", "Rosewood", "Harborview", "Huntington",
+                "Edgewater", "Brentwood", "Copperfield", "Fernwood", "Oakwood",
+                "Maplewood", "Pleasantville", "Redwood", "Birchwood", "Summerville",
+                "Whispering Pines", "Granite Falls", "Chestnut Hill", "Sunnyside",
+                "Windermere", "Silverlake", "Crestwood", "Pinecrest", "Shady Grove",
+                "Golden Valley", "Mountain View", "Willow Creek", "Canyon Ridge",
+                "Eagle Rock", "Heritage Oaks", "Crystal Springs", "Sunset Hills",
+                "Falcon Heights", "Pebble Beach", "Bluewater", "Stonybrook", "Holly Springs",
+                "Morningstar", "Riverbend", "Hillsborough", "Mystic Falls", "Willowbrook",
+                "Summerfield", "Rocky Point", "Starwood", "Autumn Ridge", "Seaview",
+                "Silver Creek", "Springdale", "Tanglewood", "Twin Lakes", "Copper Ridge",
+                "Greenwood", "Ironwood", "Hidden Valley", "Ravenwood", "Wildwood",
+                "Sunnydale", "Maple Grove", "Fairhaven", "Glenwood", "Pine Valley",
+                "Sunrise", "Valley View", "Brighton", "Mountain Springs", "Seaside"
+        };
+
+
         for (int row = 0; row < this.numRows; row++) {
             ArrayList<Country> mapRow = new ArrayList<>();
             for (int col = 0; col < this.numCols; col++) {
@@ -52,7 +77,7 @@ public class Map {
 
                 Polygon hexagon = createHexagon(x, y, hexRadius);
                 hexagon.setFill(getColor(row));
-                Country country = new Country(hexagon,"Country "+ String.valueOf(quantityCountries),Math.random(),100+(int)(Math.random()*800),Math.random(),10+(int)(Math.random()*25),false,Math.random());
+                Country country = new Country(hexagon,  settlements[(row*col)%settlements.length],100+(int)(Math.random()*800),Math.random(),10+(int)(Math.random()*25),false,Math.random());
                 country.setColor(getColor(row));
                 if(row==0 || row>=(this.numRows-2) || col==0 || col>= this.numCols-1){
                     country.setIsCountry(false);
@@ -228,7 +253,7 @@ class Country{
     private Paint color;
     private Polygon area;
     private boolean isCountry;
-    public Country(Polygon hexagon,String countryName,double populationDensity, int quantity, double stability, double averageTemperature, boolean borders, double medicalLevel){
+    public Country(Polygon hexagon,String countryName, int quantity, double stability, double averageTemperature, boolean borders, double medicalLevel){
         healthyCountries+=1;
         this.isInfected = false;
         this.area = hexagon;
@@ -295,5 +320,9 @@ class Country{
     }
     public int getInfectedCountries(){
         return infectedCountries;
+    }
+    public void setZeroValues(){
+        this.infectedCountries = 0;
+        this.healthyCountries = 0;
     }
 }

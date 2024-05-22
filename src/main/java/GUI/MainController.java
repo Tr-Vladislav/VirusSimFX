@@ -14,9 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.scene.SubScene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -24,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.shape.Polygon;
 
@@ -54,8 +53,6 @@ public class MainController {
     @FXML
     private Label world;
     @FXML
-    private Button next;
-    @FXML
     private Button startButton;
     @FXML
     private CheckBox redact;
@@ -76,12 +73,29 @@ public class MainController {
     private Label healthyCountries;
     @FXML
     private Label infectedCountries;
+    @FXML
+    private Label communicationLabel;
+    @FXML
+    private ProgressBar healthyBar;
+    @FXML
+    private ProgressBar infectedBar;
+    @FXML
+    private ProgressBar corpseBar;
+    @FXML
+    private Label country;
+    @FXML
+    private ToggleButton pause;
+    @FXML
+    private ToggleButton start1;
+    @FXML
+    private ToggleButton start2;
+
 
     public static MainController getInstance() {
         return instance;
     }
-    public void setEvents(){
-        if(redact.isSelected()) {
+    public void setEvents(boolean isRedact){
+        if(isRedact) {
             map.setMouseEvent("setGray", true);
             map.setMouseEvent("Pick", false);
         }else{
@@ -101,6 +115,24 @@ public class MainController {
         }
         this.healthyCountries.setText(String.valueOf(map.pickedCountry.getHealthyCountries()));
         this.infectedCountries.setText(String.valueOf(map.pickedCountry.getInfectedCountries()));
+
+        healthyBar.setProgress(((double)map.pickedCountry.population.getWorldPopulation()-map.pickedCountry.population.getWorldInfected())/map.pickedCountry.population.getWorldPopulation());
+        infectedBar.setProgress((double)map.pickedCountry.population.getWorldInfected()/map.pickedCountry.population.getWorldPopulation());
+        corpseBar.setProgress(((double)map.pickedCountry.population.getWorldCorpse())/map.pickedCountry.population.getWorldPopulation());
+        country.setText(map.pickedCountry.population.getCountryName());
+    }
+    public void repeatSimulation(){
+        map.pickedCountry.population.setZeroValues();
+        map.pickedCountry.setZeroValues();
+        myPane.getChildren().clear();
+        ShowMap();
+        setEvents(true);
+        map.pickedCountry.population.setWorldInfected(0);
+        map.pickedCountry.population.setWorldCorpse(0);
+        startButton.setText("Next");
+        startButton.setVisible(true);
+
+
     }
     public void nextStep(){
         for(Country country: map.getCountries()){
@@ -113,6 +145,16 @@ public class MainController {
         }
         if(map.pickedCountry.population.getWorldPopulation()==map.pickedCountry.population.getWorldInfected()){
             stopTimer();
+            Button button = new Button("Repeat");
+            button.setFont(Font.font(18));
+            button.setLayoutY(250);
+            button.setLayoutX(350);
+
+            button.addEventFilter(MouseEvent.MOUSE_CLICKED,  new EventHandler<MouseEvent>() { @Override
+                    public void handle(MouseEvent e) {
+                        repeatSimulation();
+                    }});
+            myPane.getChildren().add(button);
         }
 
         setStatistics();
@@ -127,32 +169,49 @@ public class MainController {
             myPane.getChildren().add(country.getArea());
         }
         setStatistics();
+        communicationLabel.setText("Redact your map");
     }
-    public void setFirstInfectedCountry(){
+    public boolean setFirstInfectedCountry(){
         if(!map.pickedCountry.population.getCountryName().equals("World")){
             System.out.println("Start");
             map.pickedCountry.setIsInfected();
             map.pickedCountry.population.setInfected(1);
             setStatistics();
             startButton.setVisible(false);
-            next.setVisible(true);
-            startTimer();
-
+            startTimerOnce();
+            start1.setSelected(true);
+            return true;
         }
         else{
-            System.out.println("Choose country");
+            return false;
         }
     }
-    public void startTimer() {
+    public void startTimer(int period) {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
         }
         scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(() -> Platform.runLater(() -> {
             nextStep();
-        }), 0, 100, TimeUnit.MILLISECONDS);
+        }), 0, period, TimeUnit.MILLISECONDS);
     }
-
+    public void startTimerOnce(){
+        stopTimer();
+        startTimer(300);
+        start2.setSelected(false);
+        pause.setSelected(false);
+    }
+    public void startTimerTwice(){
+        stopTimer();
+        startTimer(150);
+        start1.setSelected(false);
+        pause.setSelected(false);
+    }
+    public void stopTimerFunc(){
+        stopTimer();
+        start1.setSelected(false);
+        start2.setSelected(false);
+    }
     public void stopTimer() {
         if (scheduler != null) {
             scheduler.shutdown();
@@ -178,8 +237,25 @@ public class MainController {
             double[] xy = generateRandomPointInPolygon(country.getArea());
             Circle circle = new Circle(xy[0], xy[1], 1, Color.RED);
             circle.setMouseTransparent(true);
-            scene = myPane.getScene();
             myPane.getChildren().add(circle);
+        }
+        /*for(Node node :myPane.getChildren()){
+            if (node instanceof Circle) {
+                Circle circle = (Circle) node;
+                // Выполняем необходимые операции с кругом
+                circle.setFill(Color.BLACK); // Пример изменения цвета
+            }
+        }*/
+    }
+    public void redactEnd(){
+        if(startButton.getText().equals("Next")) {
+            startButton.setText("Start");
+            communicationLabel.setText("Select the first infected country");
+            setEvents(false);
+        }
+        else if(setFirstInfectedCountry()){
+            communicationLabel.setText("Virus started from " + map.pickedCountry.population.getCountryName());
+            startButton.setVisible(false);
         }
     }
 
@@ -187,7 +263,7 @@ public class MainController {
     void initialize(){
 
         ShowMap();
-
+        setEvents(true);
         EventHandler<MouseEvent> worldPick = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -198,6 +274,7 @@ public class MainController {
             }
         };
         world.addEventFilter(MouseEvent.MOUSE_CLICKED, worldPick);
+
     }
 
 }

@@ -1,94 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MainController">
+<AnchorPane prefHeight="637.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MainController">
     <children>
-      <ButtonBar layoutX="514.0" layoutY="436.0" prefHeight="40.0" prefWidth="200.0" />
-      <Pane fx:id="myPane" layoutX="-1.0" prefHeight="410.0" prefWidth="750.0" />
-      <Pane layoutX="-1.0" layoutY="405.0" prefHeight="95.0" prefWidth="750.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a2abb4" height="549.0" layoutX="-1.0" layoutY="-5.0" stroke="BLACK" strokeType="INSIDE" width="912.0" />
+      <Pane fx:id="myPane" layoutX="-1.0" layoutY="123.0" prefHeight="417.0" prefWidth="736.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b4dbff" height="124.0" stroke="BLACK" strokeType="INSIDE" width="736.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a6a6a6" height="542.0" layoutX="736.0" stroke="BLACK" strokeType="INSIDE" width="175.0" />
+      <Pane layoutX="-1.0" layoutY="541.0" prefHeight="95.0" prefWidth="912.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a49c97" height="95.0" layoutX="1.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="750.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a49c97" height="95.0" layoutX="1.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="912.0" />
             <Label layoutX="28.0" layoutY="5.0" text="Healthy:">
                <font>
-                  <Font size="16.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="29.0" layoutY="31.0" text="Sick:">
+            <Label layoutX="26.0" layoutY="34.0" text="Sick:">
                <font>
-                  <Font size="16.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="29.0" layoutY="56.0" text="Dead:">
+            <Label layoutX="24.0" layoutY="61.0" text="Dead:">
                <font>
-                  <Font size="16.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="world" layoutX="342.0" layoutY="6.0" text="World">
+            <Label fx:id="world" layoutX="404.0" layoutY="36.0" text="World">
                <font>
                   <Font name="Georgia Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="464.0" layoutY="29.0" text="Infected countries:">
+            <Label layoutX="700.0" layoutY="52.0" text="Infected countries:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="466.0" layoutY="6.0" text="Healthy countries:">
+            <Label layoutX="702.0" layoutY="29.0" text="Healthy countries:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <CheckBox fx:id="redact" layoutX="256.0" layoutY="19.0" mnemonicParsing="false" onAction="#setEvents" text="Redact">
+            <Label fx:id="healthy" layoutX="101.0" layoutY="7.0" text="0">
                <font>
-                  <Font size="14.0" />
+                  <Font size="18.0" />
                </font>
-            </CheckBox>
-            <Button fx:id="next" layoutX="673.0" layoutY="48.0" mnemonicParsing="false" onAction="#nextStep" text="Next" visible="false">
+            </Label>
+            <Label fx:id="sick" layoutX="70.0" layoutY="36.0" text="0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="dead" layoutX="80.0" layoutY="63.0" text="0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="healthyCountries" layoutX="839.0" layoutY="30.0" text="0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="infectedCountries" layoutX="839.0" layoutY="52.0" text="0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <ProgressBar fx:id="healthyBar" layoutX="487.0" layoutY="20.0" prefHeight="18.0" prefWidth="200.0" progress="0.42" styleClass="green-bar" stylesheets="@../styles.css" />
+            <ProgressBar fx:id="infectedBar" layoutX="487.0" layoutY="43.0" prefHeight="18.0" prefWidth="200.0" progress="0.5" styleClass="red-bar" stylesheets="@../styles.css" />
+            <ProgressBar fx:id="corpseBar" layoutX="487.0" layoutY="67.0" prefHeight="18.0" prefWidth="200.0" progress="0.0" styleClass="black-bar" stylesheets="@../styles.css" />
+            <Button fx:id="startButton" layoutX="282.0" layoutY="30.0" mnemonicParsing="false" onAction="#redactEnd" prefHeight="40.0" prefWidth="84.0" text="Next">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Label fx:id="healthy" layoutX="98.0" layoutY="6.0" text="0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Label fx:id="sick" layoutX="70.0" layoutY="32.0" text="0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Label fx:id="dead" layoutX="81.0" layoutY="56.0" text="0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Label fx:id="healthyCountries" layoutX="603.0" layoutY="7.0" text="0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Label fx:id="infectedCountries" layoutX="603.0" layoutY="29.0" text="0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Button fx:id="startButton" layoutX="350.0" layoutY="43.0" mnemonicParsing="false" onAction="#setFirstInfectedCountry" text="Start">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <Button fx:id="stop" layoutX="256.0" layoutY="54.0" mnemonicParsing="false" onAction="#stopTimer" text="Stop" />
-            <Button fx:id="start" layoutX="199.0" layoutY="56.0" mnemonicParsing="false" onAction="#startTimer" text="Start" />
          </children>
       </Pane>
+      <ToggleButton fx:id="start2" layoutX="668.0" layoutY="13.0" mnemonicParsing="false" onAction="#startTimerTwice" prefHeight="54.0" prefWidth="54.0" stylesheets="@../styles.css"/>
+      <ToggleButton fx:id="start1" layoutX="607.0" layoutY="13.0" maxWidth="-Infinity" minHeight="0.0" minWidth="10.0" mnemonicParsing="false" onAction="#startTimerOnce" prefHeight="54.0" prefWidth="54.0" stylesheets="@../styles.css"/>
+      <ToggleButton fx:id="pause" layoutX="545.0" layoutY="13.0" minWidth="23.0" mnemonicParsing="false" onAction="#stopTimerFunc" prefHeight="54.0" prefWidth="54.0" stylesheets="@../styles.css"/>
+      <Text fill="RED" layoutX="14.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Virus Simulation" wrappingWidth="280.147705078125">
+         <font>
+            <Font name="Schadow BT Bold" size="31.0" />
+         </font>
+      </Text>
+      <Label fx:id="communicationLabel" layoutX="17.0" layoutY="59.0" text="Communication" textAlignment="CENTER">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <TabPane layoutX="738.0" layoutY="2.0" prefHeight="534.0" prefWidth="170.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Virus" />
+          <Tab text="Medicine" />
+        </tabs>
+      </TabPane>
+      <ToggleButton layoutX="483.0" layoutY="13.0" minWidth="23.0" mnemonicParsing="false" onAction="#nextStep" prefHeight="54.0" prefWidth="54.0" textFill="#ff1010" />
+      <Polygon fill="#716262" layoutX="709.0" layoutY="57.0" mouseTransparent="true" points="-28.40008544921875, 1.3999862670898438, -3.0, -20.20000457763672, -28.40008544921875, -37.79999542236328" stroke="BLACK" strokeType="INSIDE" />
+      <Polygon fill="#716262" layoutX="721.0" layoutY="56.0" mouseTransparent="true" points="-28.40008544921875, 1.3999862670898438, -3.0, -20.20000457763672, -28.40008544921875, -37.79999542236328" stroke="BLACK" strokeType="INSIDE" />
+      <Polygon fill="#716262" layoutX="650.0" layoutY="58.0" mouseTransparent="true" points="-28.40008544921875, 1.3999862670898438, -3.0, -20.20000457763672, -28.40008544921875, -37.79999542236328" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#717579" height="37.0" layoutX="559.0" layoutY="23.0" mouseTransparent="true" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#717579" height="37.0" layoutX="577.0" layoutY="23.0" mouseTransparent="true" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Arc fill="#788694" layoutX="513.0" layoutY="40.0" length="270.0" mouseTransparent="true" radiusX="15.0" radiusY="15.0" startAngle="45.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" />
+      <Label fx:id="country" layoutX="321.0" layoutY="94.0" text="Country">
+         <font>
+            <Font name="Yu Gothic Bold" size="24.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

@@ -77,6 +77,12 @@ public class Population {
         worldInfected+=infected-this.infected;
         this.infected = infected;
     }
+    public void setWorldInfected(long infected){
+        this.worldInfected = infected;
+    }
+    public void setWorldCorpse(long corpse){
+        this.worldCorpse = corpse;
+    }
     public int getStepSick(){
         return stepSick;
     }
@@ -114,6 +120,11 @@ public class Population {
         }else{
             worldPopulation-=population;
         }
+    }
+    public void setZeroValues(){
+        worldPopulation = 0;
+        worldInfected = 0;
+        worldCorpse = 0;
     }
 
 }

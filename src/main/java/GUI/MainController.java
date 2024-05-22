@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -31,6 +32,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
+import virus.RespiratoryVirus;
 
 public class MainController {
 
@@ -50,12 +52,11 @@ public class MainController {
 
     private Polygon[] Map;
     private int circle_cnt = 0;
+    private RespiratoryVirus virus;
     @FXML
     private Label world;
     @FXML
     private Button startButton;
-    @FXML
-    private CheckBox redact;
     @FXML
     private Label label;
     @FXML
@@ -89,7 +90,8 @@ public class MainController {
     private ToggleButton start1;
     @FXML
     private ToggleButton start2;
-
+    @FXML
+    private VBox symptoms;
 
     public static MainController getInstance() {
         return instance;
@@ -159,6 +161,7 @@ public class MainController {
 
         setStatistics();
     }
+
     //Creating the mouse event handle
     public void ShowMap(){
 
@@ -186,6 +189,13 @@ public class MainController {
             return false;
         }
     }
+    private void setSymptoms(){
+        for(String sick: virus.getSymptoms()){
+            Label label = new Label(sick);
+            label.setFont(Font.font(16));
+            symptoms.getChildren().add(label);
+        }
+    }
     public void startTimer(int period) {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
@@ -198,17 +208,20 @@ public class MainController {
     public void startTimerOnce(){
         stopTimer();
         startTimer(300);
+        start1.setSelected(true);
         start2.setSelected(false);
         pause.setSelected(false);
     }
     public void startTimerTwice(){
         stopTimer();
         startTimer(150);
+        start2.setSelected(true);
         start1.setSelected(false);
         pause.setSelected(false);
     }
     public void stopTimerFunc(){
         stopTimer();
+        pause.setSelected(true);
         start1.setSelected(false);
         start2.setSelected(false);
     }
@@ -262,6 +275,7 @@ public class MainController {
     @FXML
     void initialize(){
 
+        virus = new RespiratoryVirus(8,0.3,0.1);
         ShowMap();
         setEvents(true);
         EventHandler<MouseEvent> worldPick = new EventHandler<MouseEvent>() {
@@ -274,7 +288,7 @@ public class MainController {
             }
         };
         world.addEventFilter(MouseEvent.MOUSE_CLICKED, worldPick);
-
+        setSymptoms();
     }
 
 }

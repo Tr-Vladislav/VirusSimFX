@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Arc?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
@@ -88,9 +89,9 @@
             </Button>
          </children>
       </Pane>
-      <ToggleButton fx:id="start2" layoutX="668.0" layoutY="13.0" mnemonicParsing="false" onAction="#startTimerTwice" prefHeight="54.0" prefWidth="54.0" stylesheets="@../styles.css"/>
-      <ToggleButton fx:id="start1" layoutX="607.0" layoutY="13.0" maxWidth="-Infinity" minHeight="0.0" minWidth="10.0" mnemonicParsing="false" onAction="#startTimerOnce" prefHeight="54.0" prefWidth="54.0" stylesheets="@../styles.css"/>
-      <ToggleButton fx:id="pause" layoutX="545.0" layoutY="13.0" minWidth="23.0" mnemonicParsing="false" onAction="#stopTimerFunc" prefHeight="54.0" prefWidth="54.0" stylesheets="@../styles.css"/>
+      <ToggleButton fx:id="start2" layoutX="668.0" layoutY="13.0" mnemonicParsing="false" onAction="#startTimerTwice" prefHeight="54.0" prefWidth="54.0" stylesheets="@../styles.css" />
+      <ToggleButton fx:id="start1" layoutX="607.0" layoutY="13.0" maxWidth="-Infinity" minHeight="0.0" minWidth="10.0" mnemonicParsing="false" onAction="#startTimerOnce" prefHeight="54.0" prefWidth="54.0" stylesheets="@../styles.css" />
+      <ToggleButton fx:id="pause" layoutX="545.0" layoutY="13.0" minWidth="23.0" mnemonicParsing="false" onAction="#stopTimerFunc" prefHeight="54.0" prefWidth="54.0" stylesheets="@../styles.css" />
       <Text fill="RED" layoutX="14.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Virus Simulation" wrappingWidth="280.147705078125">
          <font>
             <Font name="Schadow BT Bold" size="31.0" />
@@ -103,8 +104,43 @@
       </Label>
       <TabPane layoutX="738.0" layoutY="2.0" prefHeight="534.0" prefWidth="170.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="Virus" />
-          <Tab text="Medicine" />
+          <Tab text="Virus">
+               <content>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="40.0" layoutY="47.0" text="Contagiousness">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <ProgressBar layoutX="5.0" layoutY="67.0" prefHeight="18.0" prefWidth="162.0" progress="0.49" styleClass="red-bar" stylesheets="@../styles.css" />
+                        <Label layoutX="60.0" layoutY="94.0" text="Mortality">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <ProgressBar layoutX="4.0" layoutY="114.0" prefHeight="18.0" prefWidth="162.0" progress="0.24" styleClass="black-bar" stylesheets="@../styles.css" />
+                        <Label layoutX="72.0" layoutY="14.0" text="Type">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <VBox fx:id="symptoms" layoutX="8.0" layoutY="153.0" prefHeight="342.0" prefWidth="156.0">
+                           <children>
+                              <Label text="Symptoms:">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </Pane>
+               </content></Tab>
+          <Tab text="Medicine">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" />
+               </content></Tab>
         </tabs>
       </TabPane>
       <ToggleButton layoutX="483.0" layoutY="13.0" minWidth="23.0" mnemonicParsing="false" onAction="#nextStep" prefHeight="54.0" prefWidth="54.0" textFill="#ff1010" />

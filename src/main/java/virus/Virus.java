@@ -2,6 +2,19 @@ package virus;
 
 // Материнский класс для представления вируса
 public abstract class Virus {
+    public String[] symptoms = {
+            "Fever",
+            "Cough",
+            "Shortness of breath",
+            "Fatigue",
+            "Muscle or body aches",
+            "Headache",
+            "Loss of taste or smell",
+            "Sore throat",
+            "Congestion or runny nose",
+            "Nausea or vomiting",
+            "Diarrhea"
+    };
     private String type;
     private double incubationPeriod;
     private double infectionProbability;
@@ -29,30 +42,6 @@ public abstract class Virus {
 
     public boolean isIncubationPeriod() {
         return true;
-    }
-}
-
-// Дочерний класс для вируса дыхательных путей
-class RespiratoryVirus extends Virus {
-    // Конструктор
-    public RespiratoryVirus(double incubationPeriod, double infectionProbability, double mortalityRate) {
-        super("Respiratory", incubationPeriod, infectionProbability, mortalityRate);
-    }
-
-    // Переопределение метода для получения пути передачи вируса
-    @Override
-    public String getTransmissionRoute() {
-        return "Airborne";
-    }
-
-    @Override
-    public void mutation() {
-
-    }
-
-    @Override
-    public double getInfectionProbability() {
-        return 0;
     }
 }
 

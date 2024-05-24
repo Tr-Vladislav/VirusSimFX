@@ -33,6 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import virus.RespiratoryVirus;
+import virus.Virus;
 
 public class MainController {
 
@@ -83,6 +84,8 @@ public class MainController {
     @FXML
     private ProgressBar corpseBar;
     @FXML
+    private Label incubation;
+    @FXML
     private Label country;
     @FXML
     private ToggleButton pause;
@@ -122,6 +125,7 @@ public class MainController {
         infectedBar.setProgress((double)map.pickedCountry.population.getWorldInfected()/map.pickedCountry.population.getWorldPopulation());
         corpseBar.setProgress(((double)map.pickedCountry.population.getWorldCorpse())/map.pickedCountry.population.getWorldPopulation());
         country.setText(map.pickedCountry.population.getCountryName());
+        //incubation.setText(String.valueOf(virus.getIncubationPeriod()));
     }
     public void repeatSimulation(){
         map.pickedCountry.population.setZeroValues();
@@ -161,7 +165,9 @@ public class MainController {
 
         setStatistics();
     }
-
+    public void setVirus(RespiratoryVirus virus){
+        this.virus = virus;
+    }
     //Creating the mouse event handle
     public void ShowMap(){
 
@@ -274,8 +280,6 @@ public class MainController {
 
     @FXML
     void initialize(){
-
-        virus = new RespiratoryVirus(8,0.3,0.1);
         ShowMap();
         setEvents(true);
         EventHandler<MouseEvent> worldPick = new EventHandler<MouseEvent>() {

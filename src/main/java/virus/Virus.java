@@ -40,57 +40,8 @@ public abstract class Virus {
     public abstract void mutation();
     public abstract double getInfectionProbability();
 
-    public boolean isIncubationPeriod() {
-        return true;
-    }
-}
-
-// Дочерний класс для контактного вируса
-class ContactVirus extends Virus {
-    // Конструктор
-    public ContactVirus(double incubationPeriod, double infectionProbability, double mortalityRate) {
-        super("Contact", incubationPeriod, infectionProbability, mortalityRate);
-    }
-
-    // Переопределение метода для получения пути передачи вируса
-    @Override
-    public String getTransmissionRoute() {
-        return "Contact";
-    }
-
-    @Override
-    public void mutation() {
-
-    }
-
-    @Override
-    public double getInfectionProbability() {
-        return 0;
-    }
-
-}
-
-// Дочерний класс для пищевого вируса
-class FoodborneVirus extends Virus {
-    // Конструктор
-    public FoodborneVirus(double incubationPeriod, double infectionProbability, double mortalityRate) {
-        super("Foodborne", incubationPeriod, infectionProbability, mortalityRate);
-    }
-
-    // Переопределение метода для получения пути передачи вируса
-    @Override
-    public String getTransmissionRoute() {
-        return "Foodborne";
-    }
-
-    @Override
-    public void mutation() {
-
-    }
-
-    @Override
-    public double getInfectionProbability() {
-        return 0;
+    public double getIncubationPeriod() {
+        return incubationPeriod;
     }
 }
 

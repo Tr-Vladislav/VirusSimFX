@@ -20,8 +20,8 @@
             <Font name="Book Antiqua Bold" size="49.0" />
          </font>
       </Text>
-      <Button fx:id="ContactVirusButton" contentDisplay="CENTER" layoutX="105.0" layoutY="194.0" mnemonicParsing="false" prefHeight="210.0" prefWidth="144.0" style="-fx-background-color: #ddccff;" wrapText="true" />
-      <ImageView fitHeight="112.0" fitWidth="144.0" layoutX="105.0" layoutY="224.0" pickOnBounds="true" smooth="false">
+      <Button fx:id="ContactVirusButton" contentDisplay="CENTER" layoutX="105.0" layoutY="194.0" mnemonicParsing="false" onAction="#ContactVirus" prefHeight="210.0" prefWidth="144.0" style="-fx-background-color: #ddccff;" wrapText="true" />
+      <ImageView fitHeight="112.0" fitWidth="144.0" layoutX="105.0" layoutY="224.0" mouseTransparent="true" pickOnBounds="true" smooth="false">
          <image>
             <Image url="@../assets/1_3.jpg" />
          </image>
@@ -29,13 +29,13 @@
             <Blend />
          </effect>
       </ImageView>
-      <Text layoutX="128.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact Virus">
+      <Text layoutX="128.0" layoutY="380.0" mouseTransparent="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact Virus">
          <font>
             <Font name="GeoSlab703 MdCn BT Bold" size="22.0" />
          </font>
       </Text>
-      <Button fx:id="FoodborneVirusButton" contentDisplay="CENTER" layoutX="327.0" layoutY="194.0" mnemonicParsing="false" prefHeight="210.0" prefWidth="144.0" style="-fx-background-color: #ddccff;" wrapText="true" />
-      <ImageView fitHeight="112.0" fitWidth="144.0" layoutX="327.0" layoutY="224.0" pickOnBounds="true" smooth="false">
+      <Button fx:id="FoodborneVirusButton" contentDisplay="CENTER" layoutX="327.0" layoutY="194.0" mnemonicParsing="false" onAction="#FoodborneVirus" prefHeight="210.0" prefWidth="144.0" style="-fx-background-color: #ddccff;" wrapText="true" />
+      <ImageView fitHeight="112.0" fitWidth="144.0" layoutX="327.0" layoutY="224.0" mouseTransparent="true" pickOnBounds="true" smooth="false">
          <image>
             <Image url="@../assets/graphic-illustration-coronavirus-disease-pandemic-white-background.jpg" />
          </image>
@@ -43,13 +43,13 @@
             <Blend />
          </effect>
       </ImageView>
-      <Text layoutX="339.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Foodborne Virus">
+      <Text layoutX="339.0" layoutY="379.0" mouseTransparent="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Foodborne Virus">
          <font>
             <Font name="GeoSlab703 MdCn BT Bold" size="22.0" />
          </font>
       </Text>
       <Button fx:id="RespiratoryVirusButton" contentDisplay="CENTER" layoutX="549.0" layoutY="194.0" mnemonicParsing="false" onAction="#RespiratoryVirus" prefHeight="210.0" prefWidth="144.0" style="-fx-background-color: #ddccff;" wrapText="true" />
-      <ImageView fitHeight="112.0" fitWidth="144.0" layoutX="549.0" layoutY="224.0" pickOnBounds="true" smooth="false">
+      <ImageView fitHeight="112.0" fitWidth="144.0" layoutX="549.0" layoutY="224.0" mouseTransparent="true" pickOnBounds="true" smooth="false">
          <image>
             <Image url="@../assets/graphic-illustration-coronavirus-disease-pandemic-white-isolated.jpg" />
          </image>
@@ -57,7 +57,7 @@
             <Blend />
          </effect>
       </ImageView>
-      <Text accessibleRole="BUTTON" layoutX="556.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Respiratory Virus">
+      <Text accessibleRole="BUTTON" layoutX="556.0" layoutY="379.0" mouseTransparent="true" strokeType="OUTSIDE" strokeWidth="0.0" text="Respiratory Virus">
          <font>
             <Font name="GeoSlab703 MdCn BT Bold" size="22.0" />
          </font>

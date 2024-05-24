@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.setupFoodborneVirusController">
+    <fx:define>
+        <Font fx:id="headerFont" size="24" />
+    </fx:define>
+    <children>
+        <ImageView fitHeight="637.0" fitWidth="910.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../assets/backImg.jpg" />
+            </image>
+        </ImageView>
+        <Label layoutX="302.0" layoutY="14.0" text="Foodborne Virus" textFill="#ef0000">
+            <font>
+                <Font name="Georgia Bold" size="32.0" />
+            </font></Label>
+
+        <Label layoutX="104.0" layoutY="71.0" text="Symptoms:" textFill="#fcfcfc">
+            <font>
+                <Font name="Georgia Italic" size="32.0" />
+            </font></Label>
+        <CheckBox fx:id="feverCheckBox" layoutX="68.0" layoutY="109.0" onAction="#updateSimulation" text="Fever" textFill="WHITE">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="nauseaCheckBox" layoutX="68.0" layoutY="151.0" onAction="#updateSimulation" text="Nausea" textFill="WHITE">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="vomitingCheckBox" layoutX="68.0" layoutY="194.0" onAction="#updateSimulation" text="Vomiting" textFill="#fffdfd">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="diarheaCheckBox" layoutX="68.0" layoutY="239.0" onAction="#updateSimulation" text="Diarrhea" textFill="WHITE">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="abdominalPainCheckBox" layoutX="68.0" layoutY="279.0" onAction="#updateSimulation" text="Abdominal pain" textFill="WHITE">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="sepsisCheckBox" layoutX="69.0" layoutY="320.0" onAction="#updateSimulation" text="Sepsis" textFill="#ff7777">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="dehydrationCheckBox" layoutX="68.0" layoutY="361.0" onAction="#updateSimulation" text="Dehydration" textFill="#ff7777">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="toxicHepatitisCheckBox" layoutX="68.0" layoutY="406.0" onAction="#updateSimulation" text="Toxic hepatitis" textFill="#ff7777">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+
+        <Label layoutX="69.0" layoutY="455.0" text="Incubation Period (days):" textFill="WHITE">
+            <font>
+                <Font name="Georgia" size="20.0" />
+            </font></Label>
+        <Slider fx:id="incubationSlider" layoutX="60.0" layoutY="484.0" max="14" min="1" onMouseReleased="#updateSimulation" onTouchReleased="#updateSimulation" prefHeight="38.0" prefWidth="226.0" showTickLabels="true" showTickMarks="true" value="7" />
+
+        <Label layoutX="476.0" layoutY="71.0" text="Transmission Methods:" textFill="WHITE">
+            <font>
+                <Font name="Georgia Italic" size="32.0" />
+            </font></Label>
+        <CheckBox fx:id="improperFoodHandlingCheckBox" layoutX="483.0" layoutY="123.0" onAction="#updateSimulation" text="Improper food handling" textFill="WHITE">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="contaminatedWaterCheckBox" layoutX="483.0" layoutY="165.0" onAction="#updateSimulation" text="Contaminated water" textFill="WHITE">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="salivacheckBox" layoutX="483.0" layoutY="208.0" onAction="#updateSimulation" text="saliva" textFill="WHITE">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+
+        <Label layoutX="477.0" layoutY="269.0" text="Resistance:" textFill="WHITE">
+            <font>
+                <Font name="Georgia Italic" size="32.0" />
+            </font></Label>
+        <CheckBox fx:id="stomachAcidResistanceCheckBox" layoutX="477.0" layoutY="335.0" onAction="#updateSimulation" text="Stomach acid Resistance" textFill="WHITE">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="pasteurizationResistanceCheckBox" layoutX="477.0" layoutY="379.0" onAction="#updateSimulation" text="Pasteurization Resistance" textFill="WHITE">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+        <CheckBox fx:id="freezingResistanceCheckBox" layoutX="477.0" layoutY="423.0" onAction="#updateSimulation" text="Freezing Resistance" textFill="WHITE">
+            <font>
+                <Font size="20.0" />
+            </font></CheckBox>
+
+        <Label layoutX="111.0" layoutY="551.0" text="Infectivity:" textFill="WHITE">
+            <font>
+                <Font name="Gabriola" size="30.0" />
+            </font></Label>
+        <ProgressBar fx:id="infectivityBar" layoutX="60.0" layoutY="589.0" prefWidth="200.0" style="-fx-accent: red;" />
+
+        <Label layoutX="392.0" layoutY="551.0" text="Mortality:" textFill="WHITE">
+            <font>
+                <Font name="Gabriola" size="30.0" />
+            </font></Label>
+        <ProgressBar fx:id="mortalityBar" layoutX="338.0" layoutY="589.0" prefWidth="200.0" style="-fx-accent: black;" />
+
+        <Label layoutX="646.0" layoutY="551.0" text="Resistance:" textFill="WHITE">
+            <font>
+                <Font name="Gabriola" size="30.0" />
+            </font></Label>
+        <ProgressBar fx:id="resistanceBar" layoutX="597.0" layoutY="589.0" prefWidth="200.0" style="-fx-accent: blue;" />
+      <Button fx:id="nextButton" layoutX="735.0" layoutY="438.0" mnemonicParsing="false" onAction="#startSimulation" text="Next">
+         <font>
+            <Font name="Gabriola" size="27.0" />
+         </font>
+      </Button>
+      <CheckBox fx:id="antisepticsResistanceCheckBox1" layoutX="477.0" layoutY="464.0" onAction="#updateSimulation" text="Antiseptics Resistance" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </CheckBox>
+    </children>
+</AnchorPane>

@@ -25,6 +25,7 @@ public class RespiratoryVirus extends Virus {
         return 0;
     }
 
+
     public ArrayList<String> getSymptoms(){
         ArrayList<String> mas = new ArrayList<>();
         for(String sick: this.symptoms){

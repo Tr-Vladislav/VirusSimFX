@@ -24,6 +24,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.shape.Polygon;
 
@@ -32,6 +33,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
+import virus.ContactVirus;
+import virus.FoodborneVirus;
 import virus.RespiratoryVirus;
 import virus.Virus;
 
@@ -46,6 +49,11 @@ public class MainController {
         instance = this;
     }
     private Map map;
+    private int mutationCnt = 0;
+    private int progressCnt = 0;
+    private long previosWorldHealthy = 0;
+    private long previosWorldInfected = 0;
+    private long previosWorldCorpse = 0;
 
     private Stage stage;
     private Scene scene;
@@ -53,7 +61,7 @@ public class MainController {
 
     private Polygon[] Map;
     private int circle_cnt = 0;
-    private RespiratoryVirus virus;
+    public Virus virus;
     @FXML
     private Label world;
     @FXML
@@ -84,8 +92,6 @@ public class MainController {
     @FXML
     private ProgressBar corpseBar;
     @FXML
-    private Label incubation;
-    @FXML
     private Label country;
     @FXML
     private ToggleButton pause;
@@ -95,6 +101,18 @@ public class MainController {
     private ToggleButton start2;
     @FXML
     private VBox symptoms;
+    @FXML
+    private ProgressBar mortality;
+    @FXML
+    private ProgressBar infectivity;
+    @FXML
+    private Label corpseLabel;
+    @FXML
+    private Label infectedLabel;
+    @FXML
+    private Label day;
+    @FXML
+    private Text text;
 
     public static MainController getInstance() {
         return instance;
@@ -110,24 +128,39 @@ public class MainController {
     }
     public void setStatistics(){
         if(map.pickedCountry.population.getCountryName().equals("World")){
-            this.healthy.setText(String.valueOf(map.pickedCountry.population.getWorldPopulation()-map.pickedCountry.population.getWorldInfected()));
+            this.healthy.setText(String.valueOf(map.pickedCountry.population.getWorldHealthy()));
             this.sick.setText(String.valueOf(map.pickedCountry.population.getWorldInfected()));
             this.dead.setText(String.valueOf(map.pickedCountry.population.getWorldCorpse()));
+            if(map.pickedCountry.population.getWorldInfected()-previosWorldInfected>0)this.infectedLabel.setText(String.valueOf(map.pickedCountry.population.getWorldInfected() - previosWorldInfected));
+            else this.infectedLabel.setText(String.valueOf(map.pickedCountry.population.getWorldStepSick()));
+            this.corpseLabel.setText(String.valueOf(map.pickedCountry.population.getWorldCorpse()-previosWorldCorpse));
+
         }else {
-            this.healthy.setText(String.valueOf(map.pickedCountry.population.getPopulation() - map.pickedCountry.population.getInfected()));
+            this.healthy.setText(String.valueOf(map.pickedCountry.population.getHealthy()));
             this.sick.setText(String.valueOf(map.pickedCountry.population.getInfected()));
             this.dead.setText(String.valueOf(map.pickedCountry.population.getCorpse()));
+            infectedLabel.setText(String.valueOf(map.pickedCountry.population.getStepSick()));
+            corpseLabel.setText(String.valueOf(map.pickedCountry.population.getStepCorpse()));
         }
         this.healthyCountries.setText(String.valueOf(map.pickedCountry.getHealthyCountries()));
         this.infectedCountries.setText(String.valueOf(map.pickedCountry.getInfectedCountries()));
 
-        healthyBar.setProgress(((double)map.pickedCountry.population.getWorldPopulation()-map.pickedCountry.population.getWorldInfected())/map.pickedCountry.population.getWorldPopulation());
+        healthyBar.setProgress(((double)map.pickedCountry.population.getWorldHealthy())/map.pickedCountry.population.getWorldPopulation());
         infectedBar.setProgress((double)map.pickedCountry.population.getWorldInfected()/map.pickedCountry.population.getWorldPopulation());
         corpseBar.setProgress(((double)map.pickedCountry.population.getWorldCorpse())/map.pickedCountry.population.getWorldPopulation());
         country.setText(map.pickedCountry.population.getCountryName());
-        //incubation.setText(String.valueOf(virus.getIncubationPeriod()));
+        mortality.setProgress(virus.calculateMortality());
+        infectivity.setProgress(virus.calculateInfectivity()*10);
+        setPopulationStatistacs();
+
+    }
+    private void setPopulationStatistacs(){
+        text.setText(map.pickedCountry.population.toString());
+
     }
     public void repeatSimulation(){
+        progressCnt = 0;
+        map.dayZero();
         map.pickedCountry.population.setZeroValues();
         map.pickedCountry.setZeroValues();
         myPane.getChildren().clear();
@@ -140,16 +173,48 @@ public class MainController {
 
 
     }
+    private void checkProgress(){
+        if(map.pickedCountry.population.getWorldHealthy()==previosWorldHealthy &&
+        map.pickedCountry.population.getWorldCorpse() == previosWorldCorpse &&
+        map.pickedCountry.population.getWorldInfected() == previosWorldInfected){
+            progressCnt+=1;
+        }
+        previosWorldHealthy = map.pickedCountry.population.getWorldHealthy();
+        previosWorldCorpse = map.pickedCountry.population.getWorldCorpse();
+        previosWorldInfected = map.pickedCountry.population.getWorldInfected();
+    }
     public void nextStep(){
+
         for(Country country: map.getCountries()){
-            if(country.population.getInfected()+country.population.getInfected()*country.population.getInfections()<=country.population.getPopulation()) country.population.setInfected(country.population.getInfected()+(int)Math.ceil(country.population.getInfected()*country.population.getInfections()));
-            else country.population.setInfected(country.population.getPopulation());
+            if(country.population.getInfected()*virus.calculateInfectivity()<=country.population.getHealthy()) {
+                country.population.setInfected(country.population.getInfected()+(int)Math.ceil(country.population.getInfected()*virus.calculateInfectivity()));
+            }
+            else country.population.setInfected(country.population.getInfected()+country.population.getHealthy());
             if((double)(country.population.getInfected())/country.population.getPopulation() > 0.3) {
                 map.newInfected(country);
             }
             showInfected(country);
+            if(country.population.getInfected()*virus.calculateMortality()/25<=country.population.getInfected() && map.getDate()-country.getDateInfected()>virus.getIncubationPeriod() && (int)(country.population.getInfected()*virus.calculateMortality()/25)>0){
+                country.population.setCorpse(country.population.getCorpse()+(int)(country.population.getInfected()*virus.calculateMortality()/25));
+            }
+            else if(country.population.getInfected()*virus.calculateMortality()/25<=country.population.getInfected() && map.getDate()-country.getDateInfected()>10*virus.getIncubationPeriod()){
+                country.population.setCorpse(country.population.getCorpse()+(int)Math.ceil(country.population.getInfected()*virus.calculateMortality()/25));
+            }
+            //else if(map.getDate()-country.getDateInfected()>virus.getIncubationPeriod())country.population.setCorpse(country.population.getCorpse()+country.population.getInfected());
+            showCorpse(country);
         }
-        if(map.pickedCountry.population.getWorldPopulation()==map.pickedCountry.population.getWorldInfected()){
+
+        if(virus.getMutationSpeed()<=mutationCnt){
+
+            mutationCnt=0;
+            virus.addActiveSymptom();
+            setSymptoms();
+        }
+        mutationCnt+=1;
+        newDay();
+        setStatistics();
+        checkProgress();
+        if(map.pickedCountry.population.getWorldPopulation()==map.pickedCountry.population.getWorldCorpse() || progressCnt>5){
             stopTimer();
             Button button = new Button("Repeat");
             button.setFont(Font.font(18));
@@ -157,15 +222,23 @@ public class MainController {
             button.setLayoutX(350);
 
             button.addEventFilter(MouseEvent.MOUSE_CLICKED,  new EventHandler<MouseEvent>() { @Override
-                    public void handle(MouseEvent e) {
-                        repeatSimulation();
-                    }});
+            public void handle(MouseEvent e) {
+                repeatSimulation();
+            }});
             myPane.getChildren().add(button);
         }
-
-        setStatistics();
+        map.pickedCountry.population.zeroWorldStepSick();
     }
     public void setVirus(RespiratoryVirus virus){
+        this.virus = new RespiratoryVirus(1,1,1,1);
+        this.virus = virus;
+    }
+    public void setVirus(ContactVirus virus){
+        this.virus = new ContactVirus(1,1, 1, 1);
+        this.virus = virus;
+    }
+    public void setVirus(FoodborneVirus virus){
+        this.virus = new FoodborneVirus(1,1,1, 1);
         this.virus = virus;
     }
     //Creating the mouse event handle
@@ -182,8 +255,7 @@ public class MainController {
     }
     public boolean setFirstInfectedCountry(){
         if(!map.pickedCountry.population.getCountryName().equals("World")){
-            System.out.println("Start");
-            map.pickedCountry.setIsInfected();
+            map.pickedCountry.setIsInfected(map.getDate());
             map.pickedCountry.population.setInfected(1);
             setStatistics();
             startButton.setVisible(false);
@@ -195,8 +267,16 @@ public class MainController {
             return false;
         }
     }
+    private void newDay(){
+        map.newDay();
+        day.setText("Day: "+String.valueOf(map.getDate()));
+    }
     private void setSymptoms(){
-        for(String sick: virus.getSymptoms()){
+        symptoms.getChildren().clear();
+        Label label1 = new Label("Symptoms: ");
+        label1.setFont(Font.font(26));
+        symptoms.getChildren().add(label1);
+        for(String sick: virus.getActiveSymptoms()){
             Label label = new Label(sick);
             label.setFont(Font.font(16));
             symptoms.getChildren().add(label);
@@ -258,6 +338,14 @@ public class MainController {
             circle.setMouseTransparent(true);
             myPane.getChildren().add(circle);
         }
+    }
+    public void showCorpse(Country country){
+        for (int i = 0; i < country.population.getStepCorpse(); i++) {
+            double[] xy = generateRandomPointInPolygon(country.getArea());
+            Circle circle = new Circle(xy[0], xy[1], 1, Color.BLACK);
+            circle.setMouseTransparent(true);
+            myPane.getChildren().add(circle);
+        }
         /*for(Node node :myPane.getChildren()){
             if (node instanceof Circle) {
                 Circle circle = (Circle) node;
@@ -280,6 +368,7 @@ public class MainController {
 
     @FXML
     void initialize(){
+        virus = new RespiratoryVirus(1,1,1, 1);
         ShowMap();
         setEvents(true);
         EventHandler<MouseEvent> worldPick = new EventHandler<MouseEvent>() {
@@ -293,6 +382,7 @@ public class MainController {
         };
         world.addEventFilter(MouseEvent.MOUSE_CLICKED, worldPick);
         setSymptoms();
+        map.dayZero();
     }
 
 }

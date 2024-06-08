@@ -11,6 +11,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import virus.FoodborneVirus;
+import virus.RespiratoryVirus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,6 +80,8 @@ public class setupFoodborneVirusController {
     private CheckBox vomitingCheckBox;
 
     private String[] selectedSymptoms;
+    FoodborneVirus virus = new FoodborneVirus(0,0,0,1);
+
 
     @FXML
     public void initialize() {
@@ -116,6 +120,9 @@ public class setupFoodborneVirusController {
         resistanceBar.setProgress(resistance);
     }
 
+    public FoodborneVirus getVirus(){
+        return virus;
+    }
     private String[] getSelectedSymptoms() {
         List<String> symptoms = new ArrayList<>();
         if (feverCheckBox.isSelected()) symptoms.add("Fever");
@@ -157,7 +164,7 @@ public class setupFoodborneVirusController {
         for (String symptom : selectedSymptoms) {
             switch (symptom) {
                 case "Fever":
-                    mortality += 0.1;
+                    mortality += 0.2;
                     break;
                 case "Nausea":
                     mortality += 0.1;
@@ -169,13 +176,13 @@ public class setupFoodborneVirusController {
                     mortality += 0.05;
                     break;
                 case "Abdominal pain":
-                    mortality += 0.2;
+                    mortality += 0.1;
                     break;
                 case "Sepsis":
-                    mortality += 0.05;
+                    mortality += 0.25;
                     break;
                 case "Toxic hepatitis":
-                    mortality += 0.05;
+                    mortality += 0.25;
                     break;
                 // Добавьте дополнительные случаи для других симптомов, если это необходимо
             }

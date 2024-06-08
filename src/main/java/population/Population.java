@@ -6,8 +6,10 @@ import java.util.Random;
 
 // Класс для представления популяции
 public class Population {
+    private static int worldStepSick = 0;
 
     private static long worldPopulation = 0;
+    private static long worldHealthy = 0;
     private static long worldInfected = 0;
     private static long worldCorpse = 0;
     private double infections;
@@ -15,6 +17,7 @@ public class Population {
     private double populationDensity;
     private int population;
     private int infected;
+    private int healthy;
     private int stepSick;
     private int stepCorpse;
     private int corpse; //died
@@ -31,6 +34,7 @@ public class Population {
     // Конструктор
     public Population(String country, int population, double averageTemperature) {
         worldPopulation+=population;
+        worldHealthy+=population;
         this.country = country;
         //this.population = random.nextInt() & Integer.MAX_VALUE;
         this.population = population;
@@ -39,8 +43,10 @@ public class Population {
         this.averageTemperature = averageTemperature;
         this.medicalLevel = stability > 0.80 ? 1 : (stability > 0.50 ? 0.8 : stability > 0.20 ? 0.5 : 0.1);
         this.infected = 0;
+        this.healthy=population;
         this.corpse = 0;
         this.stepSick = 0;
+        this.stepCorpse = 0;
         this.borders = false;
         this.infections = 0.1;
         transmissionProbability = 0;
@@ -78,11 +84,23 @@ public class Population {
     public void medicalDevelopment() {
 
     }
-
+    public void setCorpse(int corpse) {
+        this.stepCorpse=corpse-this.corpse;
+        worldCorpse+=stepCorpse;
+        worldInfected-=stepCorpse;
+        this.infected-=stepCorpse;
+        this.corpse = corpse;
+    }
     public void setInfected(int infected) {
         this.stepSick=infected-this.infected;
-        worldInfected+=infected-this.infected;
+        worldStepSick+=stepSick;
+        worldInfected+=stepSick;
+        worldHealthy-=stepSick;
+        this.healthy-=stepSick;
         this.infected = infected;
+    }
+    public int getStepCorpse(){
+        return stepCorpse;
     }
     public void setWorldInfected(long infected){
         this.worldInfected = infected;
@@ -121,11 +139,21 @@ public class Population {
     public String getCountryName(){
         return  country;
     }
+    public int getHealthy(){return healthy;}
+    public long getWorldHealthy(){return worldHealthy;}
+    public int getWorldStepSick(){
+        return worldStepSick;
+    }
+    public void zeroWorldStepSick(){
+        worldStepSick=0;
+    }
     public void redactWorldPopulation(boolean isCountry){
         if(isCountry){
             worldPopulation+=population;
+            worldHealthy+=population;
         }else{
             worldPopulation-=population;
+            worldHealthy-=population;
         }
     }
     public void setZeroValues(){
@@ -137,17 +165,17 @@ public class Population {
     @Override
     public String toString() {
         return "Population{" +
-                "infections=" + infections +
-                ", country='" + country + '\'' +
-                ", populationDensity=" + populationDensity +
-                ", population=" + population +
-                ", infected=" + infected +
-                ", stepSick=" + stepSick +
-                ", stepCorpse=" + stepCorpse +
-                ", corpse=" + corpse +
-                ", stability=" + stability +
-                ", borders=" + borders +
-                ", medicalLevel=" + medicalLevel +
+                "\ninfections=" + infections +
+                ", \ncountry='" + country + '\'' +
+                ", \npopulationDensity=" + populationDensity +
+                ", \npopulation=" + population +
+                ", \ninfected=" + infected +
+                ", \nstepSick=" + stepSick +
+                ", \nstepCorpse=" + stepCorpse +
+                ", \ncorpse=" + corpse +
+                ", \nstability=" + stability +
+                ", \nborders=" + borders +
+                ", \nmedicalLevel=" + medicalLevel +
                 '}';
     }
 }

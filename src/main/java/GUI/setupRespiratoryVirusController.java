@@ -77,7 +77,7 @@ public class setupRespiratoryVirusController {
     private Button nextButton;
 
     private String[] selectedSymptoms;
-    RespiratoryVirus virus = new RespiratoryVirus(0,0,0);
+    RespiratoryVirus virus = new RespiratoryVirus(0,0,0, 0);
 
 
     @FXML
@@ -86,6 +86,7 @@ public class setupRespiratoryVirusController {
     }
     @FXML
     public void startSimulation(){
+        virus.setAllparam(incubationSlider.getValue(),calculateInfectivity(), calculateMortality() ,30, getSelectedSymptoms(),getSelectedSymptoms());
         nextButton.getScene().getWindow().hide();
 
         FXMLLoader loader = new FXMLLoader();
@@ -99,9 +100,7 @@ public class setupRespiratoryVirusController {
             e.printStackTrace();
         }
         MainController mainController = loader.getController();
-        virus.setCharacteristics(calculateInfectivity(),calculateMortality(),incubationSlider.getValue());
         mainController.setVirus(virus);
-
         if(mainController == null){
             System.out.println("Error");
         }
@@ -122,6 +121,11 @@ public class setupRespiratoryVirusController {
         infectivityBar.setProgress(infectivity);
         mortalityBar.setProgress(mortality);
         resistanceBar.setProgress(resistance);
+
+
+    }
+    public RespiratoryVirus getVirus(){
+        return virus;
     }
 
     private String[] getSelectedSymptoms() {
@@ -165,7 +169,7 @@ public class setupRespiratoryVirusController {
         for (String symptom : selectedSymptoms) {
             switch (symptom) {
                 case "Fever":
-                    mortality += 0.1;
+                    mortality += 0.15;
                     break;
                 case "Fatigue":
                     mortality += 0.1;
@@ -174,16 +178,16 @@ public class setupRespiratoryVirusController {
                     mortality += 0.05;
                     break;
                 case "Sore Throat":
-                    mortality += 0.05;
+                    mortality += 0.1;
                     break;
                 case "Shortness of Breath":
-                    mortality += 0.2;
+                    mortality += 0.1;
                     break;
                 case "Pulmonary acidosis":
-                    mortality += 0.05;
+                    mortality += 0.25;
                     break;
                 case "Cerebral edema":
-                    mortality += 0.05;
+                    mortality += 0.25;
                     break;
                 // Добавьте дополнительные случаи для других симптомов, если это необходимо
             }
@@ -194,9 +198,9 @@ public class setupRespiratoryVirusController {
 
     private double calculateResistance() {
         double resistance = 0.0;
-        if (antibioticResistanceCheckBox.isSelected()) resistance += 0.3;
-        if (heatResistanceCheckBox.isSelected()) resistance += 0.3;
-        if (coldResistanceCheckBox.isSelected()) resistance += 0.3;
+        if (antibioticResistanceCheckBox.isSelected()) resistance += 0.333;
+        if (heatResistanceCheckBox.isSelected()) resistance += 0.333;
+        if (coldResistanceCheckBox.isSelected()) resistance += 0.333;
 
         return Math.min(resistance, 1.0);
     }

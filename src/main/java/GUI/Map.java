@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 
 public class Map {
+    private int date;
 
     private Country world;
     private static MainController mainController;
@@ -32,6 +33,7 @@ public class Map {
         this.Height = Height;
         this.Radius = Radius;
         mapCreate( Radius, Width, Height);
+
     }
     public void mapCreate( double hexRadius,double mapWidth,double mapHeight){
 
@@ -97,34 +99,43 @@ public class Map {
         Country country = countries.get(infectedCountry.row).get(infectedCountry.col-1);
         if(country.getIsCountry() && !country.getIsInfected()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
-            if(country.population.getInfected()>0)country.setIsInfected();
+            if(country.population.getInfected()>0)country.setIsInfected(date);
         }
         country = countries.get(infectedCountry.row).get(infectedCountry.col+1);
         if(country.getIsCountry() && !country.getIsInfected()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
-            if(country.population.getInfected()>0)country.setIsInfected();
+            if(country.population.getInfected()>0)country.setIsInfected(date);
         }
         country = countries.get(infectedCountry.row+1).get(infectedCountry.col);
         if(country.getIsCountry() && !country.getIsInfected()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
-            if(country.population.getInfected()>0)country.setIsInfected();
+            if(country.population.getInfected()>0)country.setIsInfected(date);
         }
         country = countries.get(infectedCountry.row-1).get(infectedCountry.col);
         if(country.getIsCountry() && !country.getIsInfected()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
-            if(country.population.getInfected()>0)country.setIsInfected();
+            if(country.population.getInfected()>0)country.setIsInfected(date);
         }
         country = countries.get(infectedCountry.row+nearlyHex(infectedCountry.col)).get(infectedCountry.col-1);
         if(country.getIsCountry() && !country.getIsInfected()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
-            if(country.population.getInfected()>0)country.setIsInfected();
+            if(country.population.getInfected()>0)country.setIsInfected(date);
         }
         country = countries.get(infectedCountry.row+nearlyHex(infectedCountry.col)).get(infectedCountry.col+1);
         if(country.getIsCountry() && !country.getIsInfected()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
-            if(country.population.getInfected()>0)country.setIsInfected();
+            if(country.population.getInfected()>0)country.setIsInfected(date);
         }
 
+    }
+    public void dayZero(){
+        date = 0;
+    }
+    public int getDate(){
+        return date;
+    }
+    public void newDay(){
+        date+=1;
     }
     private int nearlyHex(int col){
         if(col%2==1)return 1;
@@ -241,6 +252,7 @@ public class Map {
 
 }
 class Country{
+    private int dateInfected;
     private static int healthyCountries=0;
     private static int infectedCountries=0;
     private boolean isInfected;
@@ -254,6 +266,7 @@ class Country{
     private Polygon area;
     private boolean isCountry;
     public Country(Polygon hexagon,String countryName, int quantity, double stability, double averageTemperature, boolean borders, double medicalLevel){
+        this.dateInfected = 0;
         healthyCountries+=1;
         this.isInfected = false;
         this.area = hexagon;
@@ -306,11 +319,11 @@ class Country{
     public EventHandler<MouseEvent> getEventPick() {
         return eventPick;
     }
-    public void setIsInfected(){
+    public void setIsInfected(int date){
         this.isInfected=true;
         infectedCountries+=1;
         healthyCountries-=1;
-
+        dateInfected = date;
     }
     public boolean getIsInfected(){
         return this.isInfected;
@@ -324,5 +337,8 @@ class Country{
     public void setZeroValues(){
         this.infectedCountries = 0;
         this.healthyCountries = 0;
+    }
+    public int getDateInfected(){
+        return dateInfected;
     }
 }

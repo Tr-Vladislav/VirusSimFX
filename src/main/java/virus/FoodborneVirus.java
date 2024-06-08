@@ -1,10 +1,10 @@
 package virus;
 
 // Дочерний класс для пищевого вируса
-class FoodborneVirus extends Virus {
+public class FoodborneVirus extends Virus {
     // Конструктор
-    public FoodborneVirus(double incubationPeriod, double infectionProbability, double mortalityRate) {
-        super("Foodborne", incubationPeriod, infectionProbability, mortalityRate);
+    public FoodborneVirus(double incubationPeriod, double infectionProbability, double mortalityRate, int mutationSpeed) {
+        super("Foodborne", incubationPeriod, infectionProbability, mortalityRate, mutationSpeed);
     }
 
     // Переопределение метода для получения пути передачи вируса
@@ -16,6 +16,16 @@ class FoodborneVirus extends Virus {
     @Override
     public void mutation() {
 
+    }
+
+    @Override
+    public double calculateMortality() {
+        return 0;
+    }
+
+    @Override
+    public double calculateInfectivity() {
+        return 0;
     }
 
     @Override

@@ -23,6 +23,7 @@ public class Population {
     private boolean borders;
     private double medicalLevel;
     private static final int COUNTRY_AREA = 10;
+    private double transmissionProbability;
     Random random = new Random();
 
 
@@ -36,16 +37,22 @@ public class Population {
         this.populationDensity = (double) population/COUNTRY_AREA < 1000 ? 0.1 : (population/COUNTRY_AREA < 10000 ? 0.15 : 0.30);
         this.stability = random.nextDouble();
         this.averageTemperature = averageTemperature;
-        this.medicalLevel = stability > 0.80 ? 1 : (stability > 50 ? 0.8 : stability > 20 ? 0.5 : 0.1);
+        this.medicalLevel = stability > 0.80 ? 1 : (stability > 0.50 ? 0.8 : stability > 0.20 ? 0.5 : 0.1);
         this.infected = 0;
         this.corpse = 0;
         this.stepSick = 0;
         this.borders = false;
         this.infections = 0.1;
+        transmissionProbability = 0;
     }
 
     public Population(String country) {
         this.country = country;
+    }
+
+    public void closeBorders(){
+        double bordersProbability = (infected > 0 ? 1 : 0) * medicalLevel ;
+
     }
 
     // Метод для расчета одного шага симуляции заражения
@@ -127,4 +134,20 @@ public class Population {
         worldCorpse = 0;
     }
 
+    @Override
+    public String toString() {
+        return "Population{" +
+                "infections=" + infections +
+                ", country='" + country + '\'' +
+                ", populationDensity=" + populationDensity +
+                ", population=" + population +
+                ", infected=" + infected +
+                ", stepSick=" + stepSick +
+                ", stepCorpse=" + stepCorpse +
+                ", corpse=" + corpse +
+                ", stability=" + stability +
+                ", borders=" + borders +
+                ", medicalLevel=" + medicalLevel +
+                '}';
+    }
 }

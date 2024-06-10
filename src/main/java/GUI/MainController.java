@@ -188,11 +188,12 @@ public class MainController {
     public void nextStep(){
 
         for(Country country: map.getCountries()){
+            country.population.simulateInfectionStep(virus);
             if(country.population.getInfected()*virus.calculateInfectivity()<=country.population.getHealthy()) {
                 country.population.setInfected(country.population.getInfected()+(int)Math.ceil(country.population.getInfected()*virus.calculateInfectivity()));
             }
             else country.population.setInfected(country.population.getInfected()+country.population.getHealthy());
-            if((double)(country.population.getInfected())/country.population.getPopulation() > 0.3) {
+            if((double)(country.population.getInfected())/country.population.getPopulation() > 0.3 && !country.population.isBorders()) {
                 map.newInfected(country);
             }
             showInfected(country);
@@ -205,6 +206,7 @@ public class MainController {
             //else if(map.getDate()-country.getDateInfected()>virus.getIncubationPeriod())country.population.setCorpse(country.population.getCorpse()+country.population.getInfected());
             showCorpse(country);
         }
+
 
         if(virus.getMutationSpeed()<=mutationCnt){
 
@@ -336,7 +338,7 @@ public class MainController {
     }
     public void startTimerTwice(){
         stopTimer();
-        startTimer(150);
+        startTimer(10);
         start2.setSelected(true);
         start1.setSelected(false);
         pause.setSelected(false);

@@ -6,6 +6,8 @@ import java.util.Random;
 
 // Класс для представления популяции
 public class Population {
+    private int stepCounter = 0;
+    private static int infectedCountry = 0;
     private static int worldStepSick = 0;
 
     private static long worldPopulation = 0;
@@ -27,7 +29,9 @@ public class Population {
     private double medicalLevel;
     private static final int COUNTRY_AREA = 10;
     private double transmissionProbability;
-    Random random = new Random();
+    private  Random random = new Random();
+    double bordersProbability;
+
 
 
 
@@ -57,28 +61,41 @@ public class Population {
     }
 
     public void closeBorders(){
-        double bordersProbability = (infected > 0 ? 1 : 0) * medicalLevel ;
-
+        bordersProbability = (worldInfected > 0 ? 1 : 0) * medicalLevel * stability - 0.20 ;
+        bordersProbability = Math.max(Math.min(bordersProbability, 1),0);
+        double bordersRand = random.nextDouble();
+        borders = bordersRand < bordersProbability;
     }
+
 
     // Метод для расчета одного шага симуляции заражения
+
     public void simulateInfectionStep(Virus virus) {
-        population = population - stepCorpse;
-        populationDensity = (double) population/COUNTRY_AREA < 1000 ? 0.1 : (population/COUNTRY_AREA < 10000 ? 0.15 : 0.30);
-        medicalLevel = medicalLevel - corpse / population > 0.8 ? medicalLevel : (corpse / population > 50 ? medicalLevel * 0.7 : (corpse / population > 25 ? medicalLevel * 0.4 : corpse / population > 10 ? medicalLevel * 0.15 : 0));
-        double calculateTransmissionProbability = virus.getInfectionProbability() + populationDensity - medicalLevel - stability - (borders ? 0.05 : 0);
+        stepCounter += 1;
+        if (stepCounter % 100 == 0 && !borders) {
+            closeBorders();
+        }
+        if (infected > 0) {
+            populationDensity = (double) (healthy + infected) / COUNTRY_AREA;
+//            medicalLevel -=Math.min((double) corpse / population > 0.8 ? medicalLevel : ((double) corpse / population > 0.5 ? medicalLevel * 0.7 : ((double) corpse / population > 0.25 ? medicalLevel * 0.4 : (double) corpse / population > 0.1 ? medicalLevel * 0.15 : 0)) + stability * 0.3, 1);
+//            stability = stability * (double) corpse / population > 0.8 ? 0 : ((double) corpse / population > 0.5 ?  0.7 : ((double) corpse / population > 0.25 ?  0.4 : (double) corpse / population > 0.1 ?  0.15 : 1));
+        }
+        transmissionProbability = virus.getInfectionProbability() * 0.5 * populationDensity - medicalLevel - stability - (borders ? 0.05 : 0);
+        transmissionProbability = Math.max(0, Math.min(transmissionProbability, 1));
 
 
-        // Рассчитываем вероятность передачи вируса текущему человеку
-        double transmissionProbability = calculateTransmissionProbability > 1 ? 1 : (calculateTransmissionProbability < 0 ? 0 : calculateTransmissionProbability);
+
 
 
 
 
     }
-
     public double getInfections(){
         return infections;
+    }
+
+    public boolean isBorders() {
+        return borders;
     }
 
     public void medicalDevelopment() {
@@ -165,17 +182,23 @@ public class Population {
     @Override
     public String toString() {
         return "Population{" +
-                "\ninfections=" + infections +
-                ", \ncountry='" + country + '\'' +
-                ", \npopulationDensity=" + populationDensity +
-                ", \npopulation=" + population +
-                ", \ninfected=" + infected +
-                ", \nstepSick=" + stepSick +
-                ", \nstepCorpse=" + stepCorpse +
-                ", \ncorpse=" + corpse +
-                ", \nstability=" + stability +
-                ", \nborders=" + borders +
-                ", \nmedicalLevel=" + medicalLevel +
+                "infections=" + infections +
+                ", country='" + country + '\'' +
+                ", populationDensity=" + populationDensity +
+                ", population=" + population +
+                ", infected=" + infected +
+                ", healthy=" + healthy +
+                ", stepSick=" + stepSick +
+                ", stepCorpse=" + stepCorpse +
+                ", corpse=" + corpse +
+                ", stability=" + stability +
+                ", borders=" + borders +
+                ", medicalLevel=" + medicalLevel +
+                ", transmissionProbability=" + transmissionProbability +
+                ", stepCounter=" + stepCounter +
+                ", worldInfected=" + worldInfected +
+                ", boardersProbability" + bordersProbability +
                 '}';
     }
+
 }

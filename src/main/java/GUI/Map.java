@@ -97,32 +97,32 @@ public class Map {
     }
     public void newInfected(Country infectedCountry){
         Country country = countries.get(infectedCountry.row).get(infectedCountry.col-1);
-        if(country.getIsCountry() && !country.getIsInfected()){
+        if(country.getIsCountry() && !country.getIsInfected() && !country.population.isBorders()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected(date);
         }
         country = countries.get(infectedCountry.row).get(infectedCountry.col+1);
-        if(country.getIsCountry() && !country.getIsInfected()){
+        if(country.getIsCountry() && !country.getIsInfected() && !country.population.isBorders()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected(date);
         }
         country = countries.get(infectedCountry.row+1).get(infectedCountry.col);
-        if(country.getIsCountry() && !country.getIsInfected()){
+        if(country.getIsCountry() && !country.getIsInfected() && !country.population.isBorders()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected(date);
         }
         country = countries.get(infectedCountry.row-1).get(infectedCountry.col);
-        if(country.getIsCountry() && !country.getIsInfected()){
+        if(country.getIsCountry() && !country.getIsInfected() && !country.population.isBorders()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected(date);
         }
         country = countries.get(infectedCountry.row+nearlyHex(infectedCountry.col)).get(infectedCountry.col-1);
-        if(country.getIsCountry() && !country.getIsInfected()){
+        if(country.getIsCountry() && !country.getIsInfected() && !country.population.isBorders()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected(date);
         }
         country = countries.get(infectedCountry.row+nearlyHex(infectedCountry.col)).get(infectedCountry.col+1);
-        if(country.getIsCountry() && !country.getIsInfected()){
+        if(country.getIsCountry() && !country.getIsInfected() && !country.population.isBorders()){
             country.population.setInfected((int)Math.ceil(1+Math.random()*30));
             if(country.population.getInfected()>0)country.setIsInfected(date);
         }

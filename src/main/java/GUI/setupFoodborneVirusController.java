@@ -88,6 +88,7 @@ public class setupFoodborneVirusController {
     }
     @FXML
     public void startSimulation(){
+        virus.setAllparam(incubationSlider.getValue(),calculateInfectivity(), calculateMortality() ,30, getSelectedSymptoms(),getSelectedSymptoms());
         nextButton.getScene().getWindow().hide();
 
         FXMLLoader loader = new FXMLLoader();
@@ -99,7 +100,11 @@ public class setupFoodborneVirusController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        MainController mainController = loader.getController();
+        mainController.setVirus(virus);
+        if(mainController == null){
+            System.out.println("Error");
+        }
         Parent root = loader.getRoot();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
@@ -109,7 +114,7 @@ public class setupFoodborneVirusController {
 
 
     @FXML
-    private void updateSimulation(ActionEvent event) {
+    private void updateSimulation() {
         selectedSymptoms = getSelectedSymptoms();
         double infectivity = calculateInfectivity();
         double mortality = calculateMortality();
@@ -130,9 +135,9 @@ public class setupFoodborneVirusController {
         if (vomitingCheckBox.isSelected()) symptoms.add("Vomiting");
         if (diarheaCheckBox.isSelected()) symptoms.add("Diarrhea");
         if (abdominalPainCheckBox.isSelected()) symptoms.add("Abdominal pain");
-        if (sepsisCheckBox.isSelected()) symptoms.add("Sepsis");
+        if (sepsisCheckBox.isSelected()) symptoms.add("*Sepsis");
         if (dehydrationCheckBox.isSelected()) symptoms.add("Dehydration");
-        if (toxicHepatitisCheckBox.isSelected()) symptoms.add("Toxic hepatitis");
+        if (toxicHepatitisCheckBox.isSelected()) symptoms.add("*Toxic hepatitis");
         return symptoms.toArray(new String[0]);
     }
 
@@ -164,7 +169,7 @@ public class setupFoodborneVirusController {
         for (String symptom : selectedSymptoms) {
             switch (symptom) {
                 case "Fever":
-                    mortality += 0.2;
+                    mortality += 0.15;
                     break;
                 case "Nausea":
                     mortality += 0.1;
@@ -173,15 +178,18 @@ public class setupFoodborneVirusController {
                     mortality += 0.05;
                     break;
                 case "Diarrhea":
-                    mortality += 0.05;
-                    break;
-                case "Abdominal pain":
                     mortality += 0.1;
                     break;
-                case "Sepsis":
+                case "Abdominal pain":
+                    mortality += 0.05;
+                    break;
+                case "Dehydration":
+                    mortality += 0.05;
+                    break;
+                case "*Sepsis":
                     mortality += 0.25;
                     break;
-                case "Toxic hepatitis":
+                case "*Toxic hepatitis":
                     mortality += 0.25;
                     break;
                 // Добавьте дополнительные случаи для других симптомов, если это необходимо

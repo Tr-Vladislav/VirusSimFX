@@ -65,10 +65,10 @@ public class RespiratoryVirus extends Virus {
                 case "Shortness of Breath":
                     mortality += 0.1;
                     break;
-                case "Pulmonary acidosis":
+                case "*Pulmonary acidosis":
                     mortality += 0.25;
                     break;
-                case "Cerebral edema":
+                case "*Cerebral edema":
                     mortality += 0.25;
                     break;
                 // Добавьте дополнительные случаи для других симптомов, если это необходимо

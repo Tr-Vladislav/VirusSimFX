@@ -136,8 +136,8 @@ public class setupRespiratoryVirusController {
         if (headacheCheckBox.isSelected()) symptoms.add("Headache");
         if (soreThroatCheckBox.isSelected()) symptoms.add("Sore Throat");
         if (shortnessOfBreathCheckBox.isSelected()) symptoms.add("Shortness of Breath");
-        if (pulmonaryAcidosisCheckBox.isSelected()) symptoms.add("Pulmonary acidosis");
-        if (cerebralEdemaCheckBox.isSelected()) symptoms.add("Cerebral edema");
+        if (pulmonaryAcidosisCheckBox.isSelected()) symptoms.add("*Pulmonary acidosis");
+        if (cerebralEdemaCheckBox.isSelected()) symptoms.add("*Cerebral edema");
         return symptoms.toArray(new String[0]);
     }
 
@@ -183,10 +183,10 @@ public class setupRespiratoryVirusController {
                 case "Shortness of Breath":
                     mortality += 0.1;
                     break;
-                case "Pulmonary acidosis":
+                case "*Pulmonary acidosis":
                     mortality += 0.25;
                     break;
-                case "Cerebral edema":
+                case "*Cerebral edema":
                     mortality += 0.25;
                     break;
                 // Добавьте дополнительные случаи для других симптомов, если это необходимо

@@ -120,7 +120,7 @@
                            </font>
                         </Label>
                         <ProgressBar fx:id="mortality" layoutX="4.0" layoutY="84.0" prefHeight="18.0" prefWidth="162.0" progress="0.24" styleClass="black-bar" stylesheets="@../styles.css" />
-                        <Label fx:id="virusType" layoutX="72.0" layoutY="1.0" text="Type">
+                        <Label fx:id="virusType" layoutX="24.0" layoutY="2.0" text="Type">
                            <font>
                               <Font size="16.0" />
                            </font>

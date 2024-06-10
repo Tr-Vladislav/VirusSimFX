@@ -51,12 +51,21 @@ public abstract class Virus {
     public ArrayList<String> getActiveSymptoms(){
         return activeSymptoms;
     }
-    public void addActiveSymptom(){
-        if(cntSymptoms<symptoms.length-1){
-
-            activeSymptoms.add(symptoms[cntSymptoms]);
-            cntSymptoms+=1;
+    public void addActiveSymptom(double inf){
+        if(cntSymptoms<=symptoms.length-1){
+            System.out.println(String.valueOf(inf));
+            if(symptoms[cntSymptoms].charAt(0) != '*'){
+                activeSymptoms.add(symptoms[cntSymptoms]);
+                cntSymptoms+=1;
+            }
+            else if(inf<0.5){
+                activeSymptoms.add(symptoms[cntSymptoms]);
+                cntSymptoms+=1;
+            }
         }
+    }
+    public String getVirusType(){
+        return type;
     }
     public int getMutationSpeed(){
         return mutationSpeed;

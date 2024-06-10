@@ -11,6 +11,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import virus.ContactVirus;
+import virus.RespiratoryVirus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,12 +77,14 @@ public class setupContactVirusController {
     private CheckBox vomitingCheckBox;
 
     private String[] selectedSymptoms;
+    ContactVirus virus = new ContactVirus(0,0,0,0);
 
     @FXML
     public void initialize() {
     }
     @FXML
     public void startSimulation(){
+        virus.setAllparam(incubationSlider.getValue(),calculateInfectivity(), calculateMortality() ,30, getSelectedSymptoms(),getSelectedSymptoms());
         nextButton.getScene().getWindow().hide();
 
         FXMLLoader loader = new FXMLLoader();
@@ -92,7 +96,11 @@ public class setupContactVirusController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        MainController mainController = loader.getController();
+        mainController.setVirus(virus);
+        if(mainController == null){
+            System.out.println("Error");
+        }
         Parent root = loader.getRoot();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
@@ -101,9 +109,12 @@ public class setupContactVirusController {
     }
 
 
+    public ContactVirus getVirus(){
+        return virus;
+    }
 
     @FXML
-    private void updateSimulation(ActionEvent event) {
+    private void updateSimulation() {
         selectedSymptoms = getSelectedSymptoms();
         double infectivity = calculateInfectivity();
         double mortality = calculateMortality();
@@ -121,9 +132,9 @@ public class setupContactVirusController {
         if (vomitingCheckBox.isSelected()) symptoms.add("Vomiting");
         if (rushCheckBox.isSelected()) symptoms.add("Rush");
         if (abdominalPainCheckBox.isSelected()) symptoms.add("Abdominal Pain");
-        if (paralysisCheckBox.isSelected()) symptoms.add("Paralysis");
-        if (comaCheckBox.isSelected()) symptoms.add("Coma");
-        if (sepsisCheckBox.isSelected()) symptoms.add("Sepsis");
+        if (paralysisCheckBox.isSelected()) symptoms.add("*Paralysis");
+        if (comaCheckBox.isSelected()) symptoms.add("*Coma");
+        if (sepsisCheckBox.isSelected()) symptoms.add("*Sepsis");
         return symptoms.toArray(new String[0]);
     }
 
@@ -161,22 +172,22 @@ public class setupContactVirusController {
                     mortality += 0.1;
                     break;
                 case "Vomiting":
-                    mortality += 0.05;
+                    mortality += 0.1;
                     break;
                 case "Rash":
                     mortality += 0.05;
                     break;
                 case "Abdominal pain":
+                    mortality += 0.05;
+                    break;
+                case "*Paralysis":
                     mortality += 0.2;
                     break;
-                case "Paralysis":
-                    mortality += 0.05;
+                case "*Coma":
+                    mortality += 0.2;
                     break;
-                case "Coma":
-                    mortality += 0.05;
-                    break;
-                case "Sepsis":
-                    mortality += 0.05;
+                case "*Sepsis":
+                    mortality += 0.2;
                     break;
                 // Добавьте дополнительные случаи для других симптомов, если это необходимо
             }

@@ -113,6 +113,8 @@ public class MainController {
     private Label day;
     @FXML
     private Text text;
+    @FXML
+    private Label virusType;
 
     public static MainController getInstance() {
         return instance;
@@ -207,7 +209,7 @@ public class MainController {
         if(virus.getMutationSpeed()<=mutationCnt){
 
             mutationCnt=0;
-            virus.addActiveSymptom();
+            virus.addActiveSymptom((double)map.pickedCountry.population.getWorldHealthy()/map.pickedCountry.population.getWorldPopulation());
             setSymptoms();
         }
         mutationCnt+=1;
@@ -221,25 +223,59 @@ public class MainController {
             button.setLayoutY(250);
             button.setLayoutX(350);
 
+            Button home = new Button("home");
+            home.setFont(Font.font(14));
+            home.setLayoutY(300);
+            home.setLayoutX(365);
+
             button.addEventFilter(MouseEvent.MOUSE_CLICKED,  new EventHandler<MouseEvent>() { @Override
             public void handle(MouseEvent e) {
                 repeatSimulation();
             }});
+            home.addEventFilter(MouseEvent.MOUSE_CLICKED,  new EventHandler<MouseEvent>() { @Override
+            public void handle(MouseEvent e) {
+                home();
+            }});
             myPane.getChildren().add(button);
+            //myPane.getChildren().add(home);
         }
         map.pickedCountry.population.zeroWorldStepSick();
+    }
+    private void home(){
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("Virus_choise.fxml"));
+        text.getScene().getWindow().hide();
+
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Parent root = loader.getRoot();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+
+        stage.showAndWait();
     }
     public void setVirus(RespiratoryVirus virus){
         this.virus = new RespiratoryVirus(1,1,1,1);
         this.virus = virus;
+        virusType.setText(virus.getVirusType()+" virus");
+        setStatistics();
     }
     public void setVirus(ContactVirus virus){
         this.virus = new ContactVirus(1,1, 1, 1);
         this.virus = virus;
+        virusType.setText(virus.getVirusType()+" virus");
+        setStatistics();
     }
     public void setVirus(FoodborneVirus virus){
         this.virus = new FoodborneVirus(1,1,1, 1);
         this.virus = virus;
+        virusType.setText(virus.getVirusType()+" virus");
+        setStatistics();
     }
     //Creating the mouse event handle
     public void ShowMap(){

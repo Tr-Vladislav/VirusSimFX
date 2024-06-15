@@ -12,6 +12,9 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+/**
+ * VirusSetupController class for handling the setup of virus characteristics.
+ */
 public class VirusSetupController {
 
     @FXML
@@ -49,20 +52,26 @@ public class VirusSetupController {
 
     @FXML
     private Slider TemperatureSlider;
+
     @FXML
     private Button StartButton;
 
     @FXML
     private CheckBox VomitCheckBox;
 
+    /**
+     * The initialize method is called after all @FXML annotated members have been injected.
+     * It sets up the event handler for the Start button.
+     */
     @FXML
     void initialize() {
-        StartButton.setOnAction(event ->{
+        StartButton.setOnAction(event -> {
+            // Hide the current window
             StartButton.getScene().getWindow().hide();
 
+            // Load the main.fxml file
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("main.fxml"));
-
 
             try {
                 loader.load();
@@ -70,12 +79,11 @@ public class VirusSetupController {
                 e.printStackTrace();
             }
 
+            // Set up the new stage and show it
             Parent root = loader.getRoot();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-
             stage.showAndWait();
         });
     }
-
 }

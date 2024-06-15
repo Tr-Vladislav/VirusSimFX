@@ -18,82 +18,76 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for setting up a FoodborneVirus in the simulation.
+ * Manages the user interface components and handles interactions for setting up virus parameters.
+ */
 public class setupFoodborneVirusController {
+    // Checkboxes for various symptoms and resistances
     @FXML
     private CheckBox abdominalPainCheckBox;
-
     @FXML
     private CheckBox antisepticsResistanceCheckBox1;
-
     @FXML
     private CheckBox contaminatedWaterCheckBox;
-
     @FXML
     private CheckBox dehydrationCheckBox;
-
     @FXML
     private CheckBox feverCheckBox;
-
     @FXML
     private CheckBox freezingResistanceCheckBox;
-
     @FXML
     private CheckBox diarheaCheckBox;
-
     @FXML
     private CheckBox improperFoodHandlingCheckBox;
-
     @FXML
     private Slider incubationSlider;
-
     @FXML
     private ProgressBar infectivityBar;
-
     @FXML
     private ProgressBar mortalityBar;
-
     @FXML
     private CheckBox nauseaCheckBox;
-
     @FXML
     private Button nextButton;
-
     @FXML
     private CheckBox pasteurizationResistanceCheckBox;
-
     @FXML
     private ProgressBar resistanceBar;
-
     @FXML
     private CheckBox salivacheckBox;
-
     @FXML
     private CheckBox sepsisCheckBox;
-
     @FXML
     private CheckBox stomachAcidResistanceCheckBox;
-
     @FXML
     private CheckBox toxicHepatitisCheckBox;
-
     @FXML
     private CheckBox vomitingCheckBox;
 
+    // Array of selected symptoms
     private String[] selectedSymptoms;
-    FoodborneVirus virus = new FoodborneVirus(0,0,0,1);
+    // Virus object representing the foodborne virus
+    FoodborneVirus virus = new FoodborneVirus(0, 0, 0, 1);
 
-
+    /**
+     * Initialize the controller.
+     */
     @FXML
     public void initialize() {
     }
+
+    /**
+     * Start the simulation with the configured virus.
+     * Sets the virus parameters and loads the main simulation scene.
+     */
     @FXML
-    public void startSimulation(){
-        virus.setAllparam(incubationSlider.getValue(),calculateInfectivity(), calculateMortality() ,30, getSelectedSymptoms(),getSelectedSymptoms());
+    public void startSimulation() {
+        virus.setAllparam(incubationSlider.getValue(), calculateInfectivity(), calculateMortality(), 30, getSelectedSymptoms(), getSelectedSymptoms());
         nextButton.getScene().getWindow().hide();
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("main.fxml"));
-
 
         try {
             loader.load();
@@ -102,17 +96,19 @@ public class setupFoodborneVirusController {
         }
         MainController mainController = loader.getController();
         mainController.setVirus(virus);
-        if(mainController == null){
+        if (mainController == null) {
             System.out.println("Error");
         }
         Parent root = loader.getRoot();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
-
         stage.showAndWait();
     }
 
-
+    /**
+     * Update the simulation parameters based on user input.
+     * Updates the progress bars for infectivity, mortality, and resistance.
+     */
     @FXML
     private void updateSimulation() {
         selectedSymptoms = getSelectedSymptoms();
@@ -125,9 +121,20 @@ public class setupFoodborneVirusController {
         resistanceBar.setProgress(resistance);
     }
 
-    public FoodborneVirus getVirus(){
+    /**
+     * Get the configured virus.
+     *
+     * @return the foodborne virus
+     */
+    public FoodborneVirus getVirus() {
         return virus;
     }
+
+    /**
+     * Get the selected symptoms based on user input.
+     *
+     * @return an array of selected symptoms
+     */
     private String[] getSelectedSymptoms() {
         List<String> symptoms = new ArrayList<>();
         if (feverCheckBox.isSelected()) symptoms.add("Fever");
@@ -141,21 +148,25 @@ public class setupFoodborneVirusController {
         return symptoms.toArray(new String[0]);
     }
 
+    /**
+     * Calculate the infectivity of the virus based on selected symptoms and parameters.
+     *
+     * @return the infectivity value
+     */
     private double calculateInfectivity() {
         double infectivity = 0.0;
-        if (improperFoodHandlingCheckBox.isSelected()) infectivity += 0.4;
-        if (contaminatedWaterCheckBox.isSelected()) infectivity += 0.3;
-        if (salivacheckBox.isSelected()) infectivity += 0.3;
+        if (improperFoodHandlingCheckBox.isSelected()) infectivity += 0.2;
+        if (contaminatedWaterCheckBox.isSelected()) infectivity += 0.2;
+        if (salivacheckBox.isSelected()) infectivity += 0.2;
 
         for (String symptom : selectedSymptoms) {
             switch (symptom) {
-                case "Cough":
-                    infectivity += 0.2;
-                    break;
-                case "Shortness of Breath":
+                case "Cough", "Vomiting":
                     infectivity += 0.1;
                     break;
-                // Добавьте дополнительные случаи для других симптомов, если это необходимо
+                case "Diarrhea":
+                    infectivity += 0.2;
+                    // Add additional cases for other symptoms if necessary
             }
         }
 
@@ -163,6 +174,11 @@ public class setupFoodborneVirusController {
         return Math.min(infectivity, 1.0);
     }
 
+    /**
+     * Calculate the mortality of the virus based on selected symptoms.
+     *
+     * @return the mortality value
+     */
     private double calculateMortality() {
         double mortality = 0.0;
 
@@ -192,13 +208,17 @@ public class setupFoodborneVirusController {
                 case "*Toxic hepatitis":
                     mortality += 0.25;
                     break;
-                // Добавьте дополнительные случаи для других симптомов, если это необходимо
             }
         }
 
         return Math.min(mortality, 1.0);
     }
 
+    /**
+     * Calculate the resistance of the virus based on selected resistances.
+     *
+     * @return the resistance value
+     */
     private double calculateResistance() {
         double resistance = 0.0;
         if (stomachAcidResistanceCheckBox.isSelected()) resistance += 0.25;

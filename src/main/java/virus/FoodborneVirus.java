@@ -1,13 +1,27 @@
 package virus;
 
-// Дочерний класс для пищевого вируса
+/**
+ * Subclass for a foodborne virus.
+ */
 public class FoodborneVirus extends Virus {
-    // Конструктор
+
+    /**
+     * Constructor for FoodborneVirus.
+     *
+     * @param incubationPeriod the incubation period of the virus
+     * @param infectionProbability the probability of infection
+     * @param mortalityRate the mortality rate
+     * @param mutationSpeed the speed of mutation
+     */
     public FoodborneVirus(double incubationPeriod, double infectionProbability, double mortalityRate, int mutationSpeed) {
         super("Foodborne", incubationPeriod, infectionProbability, mortalityRate, mutationSpeed);
     }
 
-    // Переопределение метода для получения пути передачи вируса
+    /**
+     * Override method to get the transmission route of the virus.
+     *
+     * @return the transmission route as a String
+     */
     @Override
     public String getTransmissionRoute() {
         return "Foodborne";
@@ -15,34 +29,59 @@ public class FoodborneVirus extends Virus {
 
     @Override
     public void mutation() {
-
+        // Implementation of mutation method
     }
 
-    public void setAllparam(double incubationPeriod, double infectionProbability, double mortalityRate,int mutationSpeed, String[] symptoms, String[] symptomsHard){
-        setCharacteristics(incubationPeriod,infectionProbability,mortalityRate, mutationSpeed);
+    /**
+     * Method to set all parameters of the virus.
+     *
+     * @param incubationPeriod the incubation period of the virus
+     * @param infectionProbability the probability of infection
+     * @param mortalityRate the mortality rate
+     * @param mutationSpeed the speed of mutation
+     * @param symptoms the list of symptoms
+     * @param symptomsHard the list of severe symptoms
+     */
+    public void setAllparam(double incubationPeriod, double infectionProbability, double mortalityRate, int mutationSpeed, String[] symptoms, String[] symptomsHard) {
+        setCharacteristics(incubationPeriod, infectionProbability, mortalityRate, mutationSpeed);
         setSymptoms(symptoms, symptomsHard);
     }
+
+    /**
+     * Method to calculate the infectivity of the virus.
+     *
+     * @return the calculated infectivity
+     */
     public double calculateInfectivity() {
         double infectivity = getInfectionProbability();
-        /*for (String symptom : activeSymptoms) {
 
+        for (String symptom : symptoms) {
             switch (symptom) {
-                case "Cough":
+                case "Cough", "Vomiting":
                     infectivity += 0.2;
                     break;
                 case "Shortness of Breath":
                     infectivity += 0.1;
                     break;
-                // Добавьте дополнительные случаи для других симптомов, если это необходимо
+                case "Diarrhea":
+                    infectivity += 0.4;
+                    // Добавьте дополнительные случаи для других симптомов, если это необходимо
             }
-        }*/
+        }
 
-        infectivity *= (getIncubationPeriod()/ 14.0);
-        return Math.min(infectivity/10, 1.0);
+        infectivity *= (getIncubationPeriod() / 14.0);
+        return Math.min(infectivity / 10, 1.0);
     }
+
+    /**
+     * Method to calculate the mortality of the virus.
+     *
+     * @return the calculated mortality
+     */
     public double calculateMortality() {
         double mortality = 0.0;
 
+        // Adjust mortality based on active symptoms
         for (String symptom : activeSymptoms) {
             switch (symptom) {
                 case "Fever":
@@ -57,23 +96,10 @@ public class FoodborneVirus extends Virus {
                 case "Diarrhea":
                     mortality += 0.1;
                     break;
-                case "Abdominal pain":
-                    mortality += 0.05;
-                    break;
-                case "Dehydration":
-                    mortality += 0.05;
-                    break;
-                case "*Sepsis":
-                    mortality += 0.25;
-                    break;
-                case "*Toxic hepatitis":
-                    mortality += 0.25;
-                    break;
-                // Добавьте дополнительные случаи для других симптомов, если это необходимо
+                // Add additional cases for other symptoms if needed
             }
         }
 
-        return Math.min(mortality, 1.0);
+        return mortality;
     }
-
 }

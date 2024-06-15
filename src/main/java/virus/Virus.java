@@ -2,11 +2,13 @@ package virus;
 
 import java.util.ArrayList;
 
-// Материнский класс для представления вируса
+/**
+ * Base class representing a virus.
+ */
 public abstract class Virus {
-    private int cntSymptoms=0;
-    private String[] symptoms;
-    private String[] symptomsHard;
+    private int cntSymptoms = 0;
+    protected String[] symptoms;
+    protected String[] symptomsHard;
     public ArrayList<String> activeSymptoms;
 
     private String type;
@@ -16,7 +18,15 @@ public abstract class Virus {
     private boolean mutation;
     private int mutationSpeed;
 
-    // Конструктор
+    /**
+     * Constructor for Virus.
+     *
+     * @param type the type of the virus
+     * @param incubationPeriod the incubation period of the virus
+     * @param infectionProbability the probability of infection
+     * @param mortalityRate the mortality rate
+     * @param mutationSpeed the speed of mutation
+     */
     public Virus(String type, double incubationPeriod, double infectionProbability, double mortalityRate, int mutationSpeed) {
         this.type = type;
         this.incubationPeriod = incubationPeriod;
@@ -27,7 +37,14 @@ public abstract class Virus {
         activeSymptoms = new ArrayList<>();
     }
 
-    // Метод для настройки характеристик вируса
+    /**
+     * Method to set the characteristics of the virus.
+     *
+     * @param incubationPeriod the incubation period of the virus
+     * @param infectionProbability the probability of infection
+     * @param mortalityRate the mortality rate
+     * @param mutationSpeed the speed of mutation
+     */
     public void setCharacteristics(double incubationPeriod, double infectionProbability, double mortalityRate, int mutationSpeed) {
         this.incubationPeriod = incubationPeriod;
         this.infectionProbability = infectionProbability;
@@ -35,51 +52,109 @@ public abstract class Virus {
         this.mutationSpeed = mutationSpeed;
     }
 
-    // Переопределение метода для получения пути передачи вируса
+    /**
+     * Abstract method to get the transmission route of the virus.
+     *
+     * @return the transmission route as a String
+     */
     public abstract String getTransmissionRoute();
+
+    /**
+     * Abstract method to handle virus mutation.
+     */
     public abstract void mutation();
+
+    /**
+     * Abstract method to calculate the mortality of the virus.
+     *
+     * @return the calculated mortality
+     */
     public abstract double calculateMortality();
+
+    /**
+     * Abstract method to calculate the infectivity of the virus.
+     *
+     * @return the calculated infectivity
+     */
     public abstract double calculateInfectivity();
 
+    public void clearActiveSymptoms(){
+        activeSymptoms = new ArrayList<String>();
+    }
     public double getIncubationPeriod() {
         return incubationPeriod;
     }
-    public void setSymptoms(String[] symptoms, String[] symptomsHard){
+
+    /**
+     * Method to set the symptoms of the virus.
+     *
+     * @param symptoms the list of symptoms
+     * @param symptomsHard the list of severe symptoms
+     */
+    public void setSymptoms(String[] symptoms, String[] symptomsHard) {
         this.symptoms = symptoms;
         this.symptomsHard = symptomsHard;
     }
-    public ArrayList<String> getActiveSymptoms(){
+
+    /**
+     * Method to get the active symptoms of the virus.
+     *
+     * @return the list of active symptoms
+     */
+    public ArrayList<String> getActiveSymptoms() {
         return activeSymptoms;
     }
-    public void addActiveSymptom(double inf){
-        if(cntSymptoms<=symptoms.length-1){
-            System.out.println(String.valueOf(inf));
-            if(symptoms[cntSymptoms].charAt(0) != '*'){
+
+    /**
+     * Method to add an active symptom based on infection probability.
+     *
+     * @param inf the infection probability
+     */
+    public void addActiveSymptom(double inf) {
+        if (cntSymptoms <= symptoms.length - 1) {
+            System.out.println(String.valueOf(cntSymptoms) + " " + symptoms.length);
+            if (inf > 0.40) {
                 activeSymptoms.add(symptoms[cntSymptoms]);
-                cntSymptoms+=1;
-            }
-            else if(inf<0.5){
-                activeSymptoms.add(symptoms[cntSymptoms]);
-                cntSymptoms+=1;
+                cntSymptoms++;
             }
         }
     }
-    public String getVirusType(){
+
+    /**
+     * Method to mutate the virus, making it more dangerous.
+     */
+    public void mutateVirus() {
+        if (!mutation) {
+            mutation = true;
+            mortalityRate += 0.1;
+            infectionProbability += 0.1;
+        }
+    }
+
+    /**
+     * Method to reset the mutation status of the virus.
+     */
+    public void resetMutation() {
+        mutation = false;
+    }
+
+    public boolean isMutated() {
+        return mutation;
+    }
+
+    public String getVirusType() {
         return type;
     }
-    public int getMutationSpeed(){
-        return mutationSpeed;
-    }
-    public void setInfectionProbability( double infectionProbability){
-        this.infectionProbability = infectionProbability;
 
-    }
-    public double getInfectionProbability(){
+    public double getInfectionProbability() {
         return infectionProbability;
     }
 
+    public double getMortalityRate() {
+        return mortalityRate;
+    }
+
+    public int getMutationSpeed() {
+        return mutationSpeed;
+    }
 }
-
-// Дочерний класс для других типов вирусов
-// Можно создать дополнительные классы для других видов вируса по аналогии с вышеуказанными классами
-

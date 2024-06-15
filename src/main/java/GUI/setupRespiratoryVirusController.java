@@ -143,14 +143,14 @@ public class setupRespiratoryVirusController {
 
     private double calculateInfectivity() {
         double infectivity = 0.0;
-        if (airborneCheckBox.isSelected()) infectivity += 0.4;
-        if (contactCheckBox.isSelected()) infectivity += 0.3;
-        if (dropletsCheckBox.isSelected()) infectivity += 0.3;
+        if (airborneCheckBox.isSelected()) infectivity += 0.25;
+        if (contactCheckBox.isSelected()) infectivity += 0.25;
+        if (dropletsCheckBox.isSelected()) infectivity += 0.25;
 
         for (String symptom : selectedSymptoms) {
             switch (symptom) {
                 case "Cough":
-                    infectivity += 0.2;
+                    infectivity += 0.15;
                     break;
                 case "Shortness of Breath":
                     infectivity += 0.1;
@@ -189,7 +189,6 @@ public class setupRespiratoryVirusController {
                 case "*Cerebral edema":
                     mortality += 0.25;
                     break;
-                // Добавьте дополнительные случаи для других симптомов, если это необходимо
             }
         }
 

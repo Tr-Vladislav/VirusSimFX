@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"VirusSimulationFX","l":"GUI"},{"m":"VirusSimulationFX","l":"population"},{"m":"VirusSimulationFX","l":"virus"}];updateSearchResults();

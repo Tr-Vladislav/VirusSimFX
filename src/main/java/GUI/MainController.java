@@ -311,7 +311,14 @@ public class MainController {
         stage.setScene(new Scene(root));
         stage.showAndWait();
     }
-
+    /**
+     * Adjusts the infectivity rate based on the average temperature of the country's population
+     * and the virus's resistance to heat and cold.
+     *
+     * @param infectivity the initial infectivity rate of the virus
+     * @param country the country for which the infectivity rate is being adjusted
+     * @return the adjusted infectivity rate
+     */
     private double correctInfectivity(double infectivity, Country country){
         if(country.population.getAverageTemperature()>20 && !virus.getHeatResistance()){
             infectivity*=0.6;

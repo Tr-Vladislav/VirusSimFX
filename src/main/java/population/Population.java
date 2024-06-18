@@ -5,10 +5,11 @@ import java.util.Random;
 
 /**
  * Class representing a population.
+ * This class handles the attributes and behaviors of a population, including
+ * infection simulation, border control, and medical development.
  */
 public class Population {
     private int stepCounter = 0;
-    private static int infectedCountry = 0;
     private static int worldStepSick = 0;
 
     private static long worldPopulation = 0;
@@ -31,7 +32,6 @@ public class Population {
     private static final int COUNTRY_AREA = 10;
     private double transmissionProbability;
     private Random random = new Random();
-    double bordersProbability;
 
     /**
      * Constructor initializes the population for a specified country with its population size and average temperature.
@@ -72,7 +72,7 @@ public class Population {
      * Method to close the borders of the country.
      */
     private void closeBorders() {
-        bordersProbability = (worldInfected > 0 ? 1 : 0) * medicalLevel * stability - 0.20;
+        double bordersProbability = (worldInfected > 0 ? 1 : 0) * medicalLevel * stability - 0.20;
         bordersProbability = Math.max(Math.min(bordersProbability, 1), 0);
         double bordersRand = random.nextDouble();
         borders = bordersRand < bordersProbability;
@@ -95,20 +95,33 @@ public class Population {
         transmissionProbability = Math.max(0, Math.min(transmissionProbability, 1));
     }
 
+    /**
+     * Gets the number of infections.
+     *
+     * @return the number of infections
+     */
     public double getInfections() {
         return infections;
     }
 
+    /**
+     * Checks if the borders are closed.
+     *
+     * @return true if the borders are closed, false otherwise
+     */
     public boolean isBorders() {
         return borders;
     }
 
+    /**
+     * Method for medical development (implementation not provided).
+     */
     public void medicalDevelopment() {
         // Method implementation
     }
 
     /**
-     * Method to set the number of corpses.
+     * Sets the number of corpses.
      *
      * @param corpse the number of corpses
      */
@@ -121,7 +134,7 @@ public class Population {
     }
 
     /**
-     * Method to set the number of infected individuals.
+     * Sets the number of infected individuals.
      *
      * @param infected the number of infected individuals
      */
@@ -134,77 +147,170 @@ public class Population {
         this.infected = infected;
     }
 
+    /**
+     * Gets the number of corpses in the current step.
+     *
+     * @return the number of corpses in the current step
+     */
     public int getStepCorpse() {
         return stepCorpse;
     }
 
+    /**
+     * Sets the global number of infected individuals.
+     *
+     * @param infected the global number of infected individuals
+     */
     public void setWorldInfected(long infected) {
         this.worldInfected = infected;
     }
 
+    /**
+     * Sets the global number of corpses.
+     *
+     * @param corpse the global number of corpses
+     */
     public void setWorldCorpse(long corpse) {
         this.worldCorpse = corpse;
     }
 
+    /**
+     * Gets the number of infected individuals in the current step.
+     *
+     * @return the number of infected individuals in the current step
+     */
     public int getStepSick() {
         return stepSick;
     }
 
+    /**
+     * Sets the average temperature of the country.
+     *
+     * @param averageTemperature the average temperature of the country
+     */
     public void setAverageTemperature(double averageTemperature) {
         this.averageTemperature = averageTemperature;
     }
 
+    /**
+     * Gets the total population.
+     *
+     * @return the total population
+     */
     public int getPopulation() {
         return population;
     }
 
+    /**
+     * Gets the number of infected individuals.
+     *
+     * @return the number of infected individuals
+     */
     public int getInfected() {
         return infected;
     }
 
+    /**
+     * Gets the number of corpses.
+     *
+     * @return the number of corpses
+     */
     public int getCorpse() {
         return corpse;
     }
 
+    /**
+     * Sets the border status of the country.
+     *
+     * @param borders the border status (true if closed, false otherwise)
+     */
     public void setBorders(boolean borders) {
         this.borders = borders;
     }
 
+    /**
+     * Gets the global population.
+     *
+     * @return the global population
+     */
     public long getWorldPopulation() {
         return worldPopulation;
     }
 
+    /**
+     * Gets the global number of infected individuals.
+     *
+     * @return the global number of infected individuals
+     */
     public long getWorldInfected() {
         return worldInfected;
     }
 
+    /**
+     * Gets the global number of corpses.
+     *
+     * @return the global number of corpses
+     */
     public long getWorldCorpse() {
         return worldCorpse;
     }
 
+    /**
+     * Gets the name of the country.
+     *
+     * @return the name of the country
+     */
     public String getCountryName() {
         return country;
     }
 
+    /**
+     * Gets the number of healthy individuals.
+     *
+     * @return the number of healthy individuals
+     */
     public int getHealthy() {
         return healthy;
     }
 
+    /**
+     * Gets the global number of healthy individuals.
+     *
+     * @return the global number of healthy individuals
+     */
     public long getWorldHealthy() {
         return worldHealthy;
     }
 
+    /**
+     * Gets the global number of infected individuals in the current step.
+     *
+     * @return the global number of infected individuals in the current step
+     */
     public int getWorldStepSick() {
         return worldStepSick;
     }
 
+    /**
+     * Resets the global step sick count to zero.
+     */
     public void zeroWorldStepSick() {
         worldStepSick = 0;
     }
+    /**
+     * Retrieves the average temperature of the population.
+     *
+     * @return the average temperature
+     */
     public double getAverageTemperature(){
         return averageTemperature;
     }
 
+    /**
+     * Redacts the global population based on the country status.
+     *
+     * @param isCountry true if adding population, false if subtracting population
+     */
     public void redactWorldPopulation(boolean isCountry) {
         if (isCountry) {
             worldPopulation += population;
@@ -215,12 +321,20 @@ public class Population {
         }
     }
 
+    /**
+     * Resets all global population values to zero.
+     */
     public void setZeroValues() {
         worldPopulation = 0;
         worldInfected = 0;
         worldCorpse = 0;
     }
 
+    /**
+     * Returns a string representation of the Population object.
+     *
+     * @return a string representation of the Population object
+     */
     @Override
     public String toString() {
         return "Population{" +
@@ -239,7 +353,6 @@ public class Population {
                 ", transmissionProbability=" + transmissionProbability +
                 ", stepCounter=" + stepCounter +
                 ", worldInfected=" + worldInfected +
-                ", boardersProbability" + bordersProbability +
                 '}';
     }
 }

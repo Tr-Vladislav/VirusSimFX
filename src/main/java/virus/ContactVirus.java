@@ -27,10 +27,6 @@ public class ContactVirus extends Virus {
         return "Contact";
     }
 
-    @Override
-    public void mutation() {
-        // Implementation of mutation method
-    }
 
     /**
      * Method to set all parameters of the virus.

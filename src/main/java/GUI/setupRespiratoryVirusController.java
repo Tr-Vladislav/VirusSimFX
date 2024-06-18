@@ -18,6 +18,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for setting up a respiratory virus in the simulation.
+ * This class manages the user interface for configuring the properties of a respiratory virus,
+ * including symptoms, transmission routes, and resistances.
+ */
 public class setupRespiratoryVirusController {
 
     @FXML
@@ -73,26 +78,32 @@ public class setupRespiratoryVirusController {
 
     @FXML
     private ProgressBar resistanceBar;
+
     @FXML
     private Button nextButton;
 
     private String[] selectedSymptoms;
-    RespiratoryVirus virus = new RespiratoryVirus(0,0,0, 0);
+    RespiratoryVirus virus = new RespiratoryVirus(0, 0, 0, 0);
 
-
+    /**
+     * Initializes the controller.
+     */
     @FXML
     public void initialize() {
-
+        // Initialization code if needed
     }
+
+    /**
+     * Starts the simulation with the configured virus.
+     * Sets the parameters of the virus and loads the main simulation screen.
+     */
     @FXML
-    public void startSimulation(){
-        virus.setAllparam(incubationSlider.getValue(),calculateInfectivity(), calculateMortality() ,30, getSelectedSymptoms(),getSelectedSymptoms());
+    public void startSimulation() {
+        virus.setAllparam(incubationSlider.getValue(), calculateInfectivity(), calculateMortality(), 30, getSelectedSymptoms(), getSelectedSymptoms());
         nextButton.getScene().getWindow().hide();
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("main.fxml"));
-
-
 
         try {
             loader.load();
@@ -101,7 +112,7 @@ public class setupRespiratoryVirusController {
         }
         MainController mainController = loader.getController();
         mainController.setVirus(virus);
-        if(mainController == null){
+        if (mainController == null) {
             System.out.println("Error");
         }
         Parent root = loader.getRoot();
@@ -111,6 +122,10 @@ public class setupRespiratoryVirusController {
         stage.showAndWait();
     }
 
+    /**
+     * Updates the simulation parameters based on the current selections.
+     * Calculates and updates the progress bars for infectivity, mortality, and resistance.
+     */
     @FXML
     private void updateSimulation() {
         selectedSymptoms = getSelectedSymptoms();
@@ -121,13 +136,22 @@ public class setupRespiratoryVirusController {
         infectivityBar.setProgress(infectivity);
         mortalityBar.setProgress(mortality);
         resistanceBar.setProgress(resistance);
-
-
     }
-    public RespiratoryVirus getVirus(){
+
+    /**
+     * Gets the configured respiratory virus.
+     *
+     * @return the configured respiratory virus
+     */
+    public RespiratoryVirus getVirus() {
         return virus;
     }
 
+    /**
+     * Gets the selected symptoms based on the user's input.
+     *
+     * @return an array of selected symptoms
+     */
     private String[] getSelectedSymptoms() {
         List<String> symptoms = new ArrayList<>();
         if (feverCheckBox.isSelected()) symptoms.add("Fever");
@@ -141,6 +165,11 @@ public class setupRespiratoryVirusController {
         return symptoms.toArray(new String[0]);
     }
 
+    /**
+     * Calculates the infectivity of the virus based on the selected symptoms and transmission routes.
+     *
+     * @return the calculated infectivity value
+     */
     private double calculateInfectivity() {
         double infectivity = 0.0;
         if (airborneCheckBox.isSelected()) infectivity += 0.25;
@@ -155,7 +184,7 @@ public class setupRespiratoryVirusController {
                 case "Shortness of Breath":
                     infectivity += 0.1;
                     break;
-                // Добавьте дополнительные случаи для других симптомов, если это необходимо
+                // Add additional cases for other symptoms if necessary
             }
         }
 
@@ -163,6 +192,11 @@ public class setupRespiratoryVirusController {
         return Math.min(infectivity, 1.0);
     }
 
+    /**
+     * Calculates the mortality of the virus based on the selected symptoms.
+     *
+     * @return the calculated mortality value
+     */
     private double calculateMortality() {
         double mortality = 0.0;
 
@@ -195,6 +229,11 @@ public class setupRespiratoryVirusController {
         return Math.min(mortality, 1.0);
     }
 
+    /**
+     * Calculates the resistance of the virus based on the selected resistances.
+     *
+     * @return the calculated resistance value
+     */
     private double calculateResistance() {
         double resistance = 0.0;
         if (antibioticResistanceCheckBox.isSelected()) resistance += 0.333;

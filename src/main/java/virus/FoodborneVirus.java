@@ -27,10 +27,7 @@ public class FoodborneVirus extends Virus {
         return "Foodborne";
     }
 
-    @Override
-    public void mutation() {
-        // Implementation of mutation method
-    }
+
 
     /**
      * Method to set all parameters of the virus.

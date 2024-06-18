@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 /**
  * Base class representing a virus.
+ * This class serves as an abstract base for different types of viruses,
+ * managing common properties such as incubation period, infection probability,
+ * mortality rate, and mutation characteristics.
  */
 public abstract class Virus {
     private boolean heatResistance = false;
@@ -62,11 +65,6 @@ public abstract class Virus {
     public abstract String getTransmissionRoute();
 
     /**
-     * Abstract method to handle virus mutation.
-     */
-    public abstract void mutation();
-
-    /**
      * Abstract method to calculate the mortality of the virus.
      *
      * @return the calculated mortality
@@ -80,9 +78,18 @@ public abstract class Virus {
      */
     public abstract double calculateInfectivity();
 
-    public void clearActiveSymptoms(){
+    /**
+     * Clears the active symptoms of the virus.
+     */
+    public void clearActiveSymptoms() {
         activeSymptoms = new ArrayList<String>();
     }
+
+    /**
+     * Gets the incubation period of the virus.
+     *
+     * @return the incubation period
+     */
     public double getIncubationPeriod() {
         return incubationPeriod;
     }
@@ -140,35 +147,79 @@ public abstract class Virus {
         mutation = false;
     }
 
+    /**
+     * Checks if the virus has mutated.
+     *
+     * @return true if the virus has mutated, false otherwise
+     */
     public boolean isMutated() {
         return mutation;
     }
 
+    /**
+     * Gets the type of the virus.
+     *
+     * @return the type of the virus
+     */
     public String getVirusType() {
         return type;
     }
 
+    /**
+     * Gets the infection probability of the virus.
+     *
+     * @return the infection probability
+     */
     public double getInfectionProbability() {
         return infectionProbability;
     }
 
+    /**
+     * Gets the mortality rate of the virus.
+     *
+     * @return the mortality rate
+     */
     public double getMortalityRate() {
         return mortalityRate;
     }
 
+    /**
+     * Gets the mutation speed of the virus.
+     *
+     * @return the mutation speed
+     */
     public int getMutationSpeed() {
         return mutationSpeed;
     }
-    public boolean getColdResistance(){
+    /**
+     * Checks if the virus has resistance to cold temperatures.
+     *
+     * @return true if the virus is resistant to cold, false otherwise
+     */
+    public boolean getColdResistance() {
         return coldResistance;
     }
-    public boolean getHeatResistance(){
+
+    /**
+     * Checks if the virus has resistance to heat temperatures.
+     *
+     * @return true if the virus is resistant to heat, false otherwise
+     */
+    public boolean getHeatResistance() {
         return heatResistance;
     }
-    public void setColdResistance(){
+
+    /**
+     * Sets the virus to be resistant to cold temperatures.
+     */
+    public void setColdResistance() {
         coldResistance = true;
     }
-    public void setHeatResistance(){
+
+    /**
+     * Sets the virus to be resistant to heat temperatures.
+     */
+    public void setHeatResistance() {
         heatResistance = true;
     }
 }

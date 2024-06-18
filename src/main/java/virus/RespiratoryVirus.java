@@ -29,10 +29,7 @@ public class RespiratoryVirus extends Virus {
         return "Airborne";
     }
 
-    @Override
-    public void mutation() {
-        // Implementation of mutation method
-    }
+
 
     /**
      * Method to set all parameters of the virus.

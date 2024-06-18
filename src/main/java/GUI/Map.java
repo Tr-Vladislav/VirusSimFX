@@ -9,7 +9,11 @@ import population.*;
 
 import java.util.ArrayList;
 
-
+/**
+ * Class representing the map in the simulation.
+ * This class handles the creation and management of the map,
+ * including countries and their states.
+ */
 public class Map {
     // Variable to keep track of the current date or simulation time
     private final int minTemp = -20;
@@ -192,6 +196,12 @@ public class Map {
     private int nearlyHex(int col) {
         return col % 2 == 1 ? 1 : -1;
     }
+    /**
+     * Calculates the temperature at a specific row in a grid.
+     *
+     * @param row the row number for which the temperature is being calculated
+     * @return the temperature at the specified row
+     */
     private double getTemperature(int row){
         double temp = maxTemp-((double)row/numRows*(maxTemp-minTemp));
         return temp;
@@ -342,8 +352,11 @@ public class Map {
         return world;
     }
 }
-
-
+/**
+ * Class representing a country in the simulation.
+ * This class handles the attributes and behaviors of a country,
+ * including its population, infection status, and visual representation on the map.
+ */
 class Country {
     // Date when the country got infected
     private int dateInfected;

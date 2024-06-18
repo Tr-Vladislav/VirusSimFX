@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 public class Map {
     // Variable to keep track of the current date or simulation time
+    private final int minTemp = -20;
+    private final int maxTemp = 40;
     private int date;
 
     // World representation in the simulation
@@ -102,7 +104,7 @@ public class Map {
 
                 Polygon hexagon = createHexagon(x, y, hexRadius);
                 hexagon.setFill(getColor(row));
-                Country country = new Country(hexagon, settlements[(row * col) % settlements.length], 100 + (int) (Math.random() * 800), Math.random(), 10 + (int) (Math.random() * 25), false, Math.random());
+                Country country = new Country(hexagon, settlements[(row * col) % settlements.length], 100 + (int) (Math.random() * 800), Math.random(), getTemperature(row), false, Math.random());
                 country.setColor(getColor(row));
                 if (row == 0 || row >= (this.numRows - 2) || col == 0 || col >= this.numCols - 1) {
                     country.setIsCountry(false);
@@ -157,6 +159,7 @@ public class Map {
         }
     }
 
+
     /**
      * Initialize the simulation date to zero.
      */
@@ -189,7 +192,10 @@ public class Map {
     private int nearlyHex(int col) {
         return col % 2 == 1 ? 1 : -1;
     }
-
+    private double getTemperature(int row){
+        double temp = maxTemp-((double)row/numRows*(maxTemp-minTemp));
+        return temp;
+    }
     /**
      * Set mouse event handlers for countries.
      *
@@ -540,5 +546,6 @@ class Country {
     public int getDateInfected() {
         return dateInfected;
     }
+
 }
 

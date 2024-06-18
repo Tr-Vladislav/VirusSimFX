@@ -159,6 +159,11 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
+                        <Label fx:id="resistance" layoutY="481.0" text="Label">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
                      </children>
                   </Pane>
                </content></Tab>
@@ -192,5 +197,11 @@
             <Font size="16.0" />
          </font>
       </Label>
+      <Label fx:id="temperature" layoutX="17.0" layoutY="94.0" text="Label">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Text layoutX="67.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" />
     </children>
 </AnchorPane>

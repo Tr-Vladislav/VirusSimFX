@@ -130,6 +130,10 @@ public class MainController {
     private Text text;
     @FXML
     private Label virusType;
+    @FXML
+    private Label temperature;
+    @FXML
+    private Label resistance;
 
     /**
      * Get the singleton instance of MainController.
@@ -183,6 +187,10 @@ public class MainController {
         country.setText(map.pickedCountry.population.getCountryName());
         mortality.setProgress(virus.calculateMortality());
         infectivity.setProgress(virus.calculateInfectivity() * 10);
+        String res = "";
+        if(virus.getHeatResistance())res+='H';
+        if(virus.getColdResistance())res+='C';
+        resistance.setText(res);
         setPopulationStatistacs();
     }
 
@@ -191,6 +199,7 @@ public class MainController {
      */
     private void setPopulationStatistacs() {
         text.setText(map.pickedCountry.population.toString());
+        temperature.setText(String.valueOf(((double)(int)(map.pickedCountry.population.getAverageTemperature()*10))/10)+"℃");
     }
 
     /**
@@ -230,8 +239,8 @@ public class MainController {
     public void nextStep() {
         for (Country country : map.getCountries()) {
             country.population.simulateInfectionStep(virus);
-            if (country.population.getInfected() * virus.calculateInfectivity() <= country.population.getHealthy()) {
-                country.population.setInfected(country.population.getInfected() + (int) Math.ceil(country.population.getInfected() * virus.calculateInfectivity()));
+            if (country.population.getInfected() * correctInfectivity(virus.calculateInfectivity(), country) <= country.population.getHealthy()) {
+                country.population.setInfected(country.population.getInfected() + (int) Math.ceil(country.population.getInfected() * correctInfectivity(virus.calculateInfectivity(), country)));
             } else country.population.setInfected(country.population.getInfected() + country.population.getHealthy());
             if ((double) (country.population.getInfected()) / country.population.getPopulation() > 0.3 && !country.population.isBorders()) {
                 map.newInfected(country);
@@ -303,6 +312,15 @@ public class MainController {
         stage.showAndWait();
     }
 
+    private double correctInfectivity(double infectivity, Country country){
+        if(country.population.getAverageTemperature()>20 && !virus.getHeatResistance()){
+            infectivity*=0.6;
+        }
+        if(country.population.getAverageTemperature()<0 && !virus.getColdResistance()){
+            infectivity*=0.4;
+        }
+        return infectivity;
+    }
     /**
      * Set the virus to a RespiratoryVirus.
      *
@@ -361,6 +379,8 @@ public class MainController {
         if (!map.pickedCountry.population.getCountryName().equals("World")) {
             map.pickedCountry.setIsInfected(map.getDate());
             map.pickedCountry.population.setInfected(1);
+            if(map.pickedCountry.population.getAverageTemperature()>20)virus.setHeatResistance();
+            if(map.pickedCountry.population.getAverageTemperature()<0)virus.setColdResistance();
             setStatistics();
             startButton.setVisible(false);
             startTimerOnce();

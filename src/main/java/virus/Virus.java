@@ -6,6 +6,8 @@ import java.util.ArrayList;
  * Base class representing a virus.
  */
 public abstract class Virus {
+    private boolean heatResistance = false;
+    private boolean coldResistance = false;
     private int cntSymptoms = 0;
     protected String[] symptoms;
     protected String[] symptomsHard;
@@ -156,5 +158,17 @@ public abstract class Virus {
 
     public int getMutationSpeed() {
         return mutationSpeed;
+    }
+    public boolean getColdResistance(){
+        return coldResistance;
+    }
+    public boolean getHeatResistance(){
+        return heatResistance;
+    }
+    public void setColdResistance(){
+        coldResistance = true;
+    }
+    public void setHeatResistance(){
+        heatResistance = true;
     }
 }

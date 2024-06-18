@@ -201,6 +201,9 @@ public class Population {
     public void zeroWorldStepSick() {
         worldStepSick = 0;
     }
+    public double getAverageTemperature(){
+        return averageTemperature;
+    }
 
     public void redactWorldPopulation(boolean isCountry) {
         if (isCountry) {
